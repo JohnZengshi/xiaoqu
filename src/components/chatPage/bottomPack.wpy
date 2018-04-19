@@ -1,0 +1,153 @@
+<template>
+  <view class='bottomPack'>
+    <view class='Wallet' @tap.stop="_entryMine">
+      我的
+    </view>
+    <view class='optionBox'>
+      <scroll-view class='option' data-id='option' scroll-x="true">
+        <view class='' @tap.stop="_entryVip">会员</view>
+        <view class='' @tap.stop="_entryGuide">小区指南</view>
+        <view class='' @tap.stop="_entryBorrow">借东西</view>
+        <view class='findCoupon' @tap.stop="_findCoupon">优惠券</view>
+      </scroll-view>
+    </view>
+    <form bindsubmit="formSubmit" report-submit>
+      <view class="search">
+        <input placeholder="我想要……" bindinput='valueInput' value='{{valInput}}' />
+        <button form-type="submit" type="default" class="btn-area" catchtap="bindButtonTap">发送</button>
+      </view>
+    </form>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  export default class bottomPack extends wepy.component {
+    async onLoad(){
+      this.$emit('some-event', 1, 2, 3, 4);
+    }
+    methods = {
+      _entryVip() {
+        console.log("Vip")
+      },
+      _entryGuide() {
+        // console.log(this.$parent.$parent.globalData)
+        wx.navigateTo({
+          // url: '../guide/guide?pid=' + globalData.userInfo.pid + "&shop_name=" + globalData.userInfo.shop_name
+          url: '../guide/guide'
+        })
+      },
+      _entryBorrow() {
+        wx.navigateTo({
+          url: '../borrow/borrow'
+        })
+      },
+      _findCoupon() {
+        console.log(this);
+      },
+      valueInput() {
+
+      },
+      bindButtonTap() {
+
+      }
+    }
+    events = {
+      'some-event': (p1, p2, p3, $event) => {
+      }
+    }
+  }
+
+</script>
+
+<style lang="less">
+  .bottomPack {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    .Wallet {
+      position: fixed;
+      bottom: 210rpx;
+      right: 20rpx;
+      height: 108rpx;
+      width: 108rpx;
+      line-height: 108rpx;
+      text-align: center;
+      font-size: 28rpx;
+      color: #fff;
+      margin: 0 8rpx 54rpx 0;
+      border-radius: 50%;
+      background-color: #fec128;
+      image {
+        width: 108rpx;
+        height: 108rpx;
+        float: right;
+      }
+    }
+    .optionBox {
+      height: 75rpx;
+      width: 100%;
+      .option {
+        position: absolute;
+        z-index: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        view {
+          padding: 0 28rpx;
+          font-size: 28rpx;
+          height: 64rpx;
+          text-align: center;
+          line-height: 64rpx;
+          margin-right: 12rpx;
+          background-color: white;
+          display: inline-block;
+          border-radius: 50rpx;
+          &:first-of-type {
+            margin-left: 28rpx;
+          }
+
+        }
+        .findCoupon {
+          color: #FFD203;
+        }
+      }
+
+    }
+    form {
+      .search {
+        position: relative;
+        width: 100%;
+        height: 100rpx;
+        z-index: 1;
+        background-color: white;
+        display: flex;
+        flex-direction: row;
+        input {
+          width: 564rpx;
+          height: 72rpx;
+          font-size: 32rpx;
+          color: #333;
+          border-radius: 8rpx;
+          border-width: 1;
+          border: 1px solid #e6e6e6;
+          box-sizing: border-box;
+          margin: 14rpx 26rpx 14rpx 28rpx;
+          padding-left: 16rpx;
+        }
+        .btn-area {
+          width: 104rpx;
+          height: 72rpx;
+          font-size: 28rpx;
+          color: #fff;
+          text-align: center;
+          border-radius: 12rpx;
+          line-height: 72rpx;
+          z-index: 2;
+          background-color: #FFD203;
+          margin: 14rpx 28rpx 14rpx 0;
+          padding: 0;
+        }
+      }
+    }
+  }
+
+</style>

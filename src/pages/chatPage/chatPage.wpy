@@ -1,0 +1,1664 @@
+<template>
+  <view class="section">
+    <scroll-view class='sectionBox' id='scrollBox' data-id='scrollBox' scroll-y="true" style="margin-bottom: 40px;" scroll-into-view="{{toView}}">
+      <block wx:for="{{chatBox}}" wx:key="item">
+        <view id='to{{index+1}}' class="BOX {{item.class}}" animation="{{animationData}}">
+
+          <view wx:if="{{item.type == 'ai' || item.type == 'user'}}">
+            <text wx:for="{{item.content}}" wx:for-item="items" wx:key="key">{{items}}</text>
+          </view>
+
+          <block wx:elif="{{item.type == 'coupon'}}">
+
+            <!-- 有券有返利 -->
+            <view class="botn_money_coupon" wx:if="{{item.couponStatus == 'botn_money_coupon'}}">
+              <image class='background' src='./images/botn_money_coupon.png'></image>
+              <view catchtap='couponToDetail' data-item="{{item}}" class='comment'>
+                <view class='left'>
+                  <view class='pic'>
+                    <image style="width:140rpx; height: 140rpx;border-radius: 8rpx;" mode='aspectFill' src="{{item.pic}}"></image>
+                  </view>
+                  <view class='content'>
+                    <text>{{item.title}}</text>
+                    <text>
+                      <text>券后价</text>
+                      <text>
+                        <text style='margin-right:0;'>￥</text>
+                        <text>{{item.newpirce}}</text>
+                      </text>
+                    </text>
+                  </view>
+                </view>
+                <view class='right'>
+                  <text>
+                    <text style='font-size: 26rpx;'>￥</text>
+                    <text style='font-size: 44rpx;font-weight: 800;line-height:44rpx'>{{item.ulanprice}}</text>
+                  </text>
+                </view>
+                <view class='bottom botn_money_coupon'>
+                  <text>领券购买、确认收货，预计可领</text>
+                  <text>￥{{item.commission}}</text>
+                  <text>现金返利红包</text>
+                </view>
+              </view>
+            </view>
+
+            <!-- 有券无返利 -->
+            <view class="coupon_no_money" wx:if="{{item.couponStatus == 'coupon_no_money'}}">
+              <view @tap.stop='couponToDetail' data-item="{{item}}" class='comment'>
+                <image class='background' src='../../images/coupon_no_money.png'></image>
+                <view class='left'>
+                  <view class='pic'>
+                    <image style="width:146rpx; height: 157rpx;border-radius: 8rpx;" mode='aspectFill' src="{{item.pic}}"></image>
+                  </view>
+                  <view class='content'>
+                    <text>{{item.title}}</text>
+                    <text>¥{{item.discountprice}}</text>
+                    <text>
+                      <text>券后价</text>
+                      <text>¥{{item.newpirce}}</text>
+                    </text>
+                  </view>
+                </view>
+                <view class='right flex flex-v flex-align-center flex-pack-center'>
+                  <view>
+                    <text>￥</text>
+                    <text>{{item.ulanprice}}</text>
+                  </view>
+                  <view>优惠券</view>
+                </view>
+              </view>
+              <button class="zhuanfa" data-item="{{item}}" open-type="share" data-from="coupon">转发给朋友</button>
+            </view>
+
+            <!-- 无券有返利 -->
+            <view class="money_no_coupon" wx:if="{{item.couponStatus == 'money_no_coupon'}}">
+              <image class='background' src='./images/money_no_coupon.png'></image>
+              <view catchtap='couponToDetail' data-item="{{item}}" class='comment'>
+                <view class='left money_no_coupon_Left'>
+                  <view class='pic'>
+                    <image style="width:140rpx; height: 140rpx;border-radius: 8rpx;" mode='aspectFill' src="{{item.pic}}"></image>
+                  </view>
+                  <view class='content money_no_coupon'>
+                    <text>{{item.title}}</text>
+                    <text>
+                      <text>原价:￥{{item.discountprice}}</text>
+                    </text>
+                  </view>
+                </view>
+                <view class='bottom money_no_coupon'>
+                  <image src='./images/rebate_money.png'></image>
+                  <view class='content'>
+                    <view>
+                      <text>1.复制淘口令,去淘宝下单购买</text>
+                    </view>
+                    <view>
+                      <text>2.确认收货，预计领</text>
+                      <text>￥{{item.commission}}</text>
+                      <text>现金返利红包</text>
+                    </view>
+                  </view>
+                </view>
+              </view>
+            </view>
+
+          </block>
+
+          <block wx:elif="{{item.type == 'card'}}">
+            <!-- -->
+            <!--物业 -->
+            <view wx:if="{{item.keywordtype == 1}}">
+              <view class='estate_title flex flex-v flex-align-center'>
+                <image src='/image/estate_home.png'></image>
+                <view class='estate_name'>
+                  <text>{{item.content.shop_name}}</text>
+                  <text>{{item.content.realname}}</text>
+                </view>
+              </view>
+              <view class='estate_info'>
+                <view wx:if="{{item.content.address !=''}}" class='estate_item' data-item="{{item.content}}" catchtap="_entryLocation">
+                  <image src='/image/location.png' class="estate_icon"></image>
+                  <text>{{item.content.address}}</text>
+                  <image src='/image/estate_more.png' class='estate_more'></image>
+                </view>
+                <view wx:if="{{item.content.tel !=''}}" class='estate_item' data-phone="{{item.content.tel}}" catchtap="calling">
+                  <image src='/image/tel.png' class="estate_icon"></image>
+                  <text>{{item.content.tel}}</text>
+                  <image src='/image/estate_more.png' class='estate_more'></image>
+                </view>
+              </view>
+              <button class="zhuanfa" open-type="share" data-item="{{item.content}}" data-from="wuye">转发给朋友</button>
+            </view>
+
+            <!-- -->
+            <!-- 通知 -->
+            <view wx:elif="{{item.keywordtype == 2}}">
+              <view class='estate_title flex flex-v flex-align-center' data-item="{{item.content}}" catchtap="entryFreshNews">
+                <image src='/image/message.jpg'></image>
+                <view class='estate_name'>
+                  <text>{{item.content.shop_name}}</text>
+                  <text>{{item.content.createtime}}</text>
+                </view>
+              </view>
+              <view class='message_warp'>
+                <view>{{item.content.description}}</view>
+              </view>
+              <button class="zhuanfa" open-type="share" data-item="{{item.content}}" data-from="tongzhi">转发给朋友</button>
+            </view>
+
+            <!--商品 -->
+            <view wx:elif="{{item.keywordtype == 3}}">
+              <view class='goodsContent' data-id="{{item.content.id}}" catchtap="_entryDetail">
+                <image src='{{item.content.thumb}}' class='img'></image>
+                <view class='goods_name flex flex-v flex-pack-justify'>
+                  <view>{{item.content.title}}</view>
+                  <view class='serve'>{{item.content.type_name}}</view>
+                </view>
+              </view>
+              <view class='price_warp'>
+                <view class='price'>
+                  <view>原价</view>
+                  <view class='price_time'>￥{{item.content.product_price}}/{{item.content.product_unit}}</view>
+                </view>
+                <view class='price'>
+                  <view>会员价</view>
+                  <view class='price_time'>
+                    <text>￥0/{{item.content.product_unit}}</text>
+                    <image src='/image/init.png'></image>
+                  </view>
+                </view>
+              </view>
+              <button class="zhuanfa" open-type="share" data-item="{{item.content}}" data-from="shangping">转发给朋友</button>
+            </view>
+            <!--  -->
+
+            <!-- 小区指南 -->
+            <view wx:elif="{{item.keywordtype == 7}}">
+              <view class='estate_title flex flex-v flex-align-center' data-name="{{item.content.company}}" data-icon="{{item.content.logo}}"
+                data-from="data_list" data-id="{{item.content.id}}" catchtap="entryYellowPage">
+                <image src='{{item.content.logo}}'></image>
+                <view class='estate_name'>
+                  <text>{{item.content.company}}</text>
+                  <text>{{item.content.shop_name}}</text>
+                </view>
+              </view>
+              <view class='estate_info'>
+                <view wx:if="{{item.content.address !=''}}" class='estate_item' data-item="{{item.content}}" catchtap="_entryLocation">
+                  <image src='/image/location.png' class="estate_icon"></image>
+                  <text>{{item.content.address}}</text>
+                  <image src='/image/estate_more.png' class='estate_more'></image>
+                </view>
+                <view wx:if="{{item.content.tel !=''}}" class='estate_item' data-phone="{{item.content.tel}}" catchtap="calling">
+                  <image src='/image/tel.png' class="estate_icon"></image>
+                  <text>{{item.content.tel}}</text>
+                  <image src='/image/estate_more.png' class='estate_more'></image>
+                </view>
+              </view>
+              <button class="zhuanfa" open-type="share" data-item="{{item.content}}" data-from="zhinan">转发给朋友</button>
+            </view>
+
+          </block>
+        </view>
+      </block>
+      <!--关键字搜索 -->
+    </scroll-view>
+    <view class='bottomPack'>
+      <view class='Wallet' catchtap="_entryMine">
+        我的
+      </view>
+      <view class='optionBox'>
+        <scroll-view class='option' data-id='option' scroll-x="true">
+          <view style="background-color:#FEC128;" catchtap="_entryVip">会员</view>
+          <view class='' catchtap="_entryGuide">小区指南</view>
+          <view class='' catchtap="_entryBorrow">物品共享</view>
+          <view class='' wx:if="{{temp}}" catchtap="_findCoupon">优惠券</view>
+          <view class='freshEverday' wx:if="{{temp}}" catchtap="_entryFreshEverday">每日优选</view>
+        </scroll-view>
+      </view>
+      <form @submit.stop="formSubmit" report-submit>
+        <view class="search">
+          <input placeholder="我想要……" @input="valueInput" value="{{inputmsg}}"/>
+          <button type="default" class="btn-area" @tap.stop="bindButtonTap">发送</button>
+        </view>
+      </form>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy';
+  import Api from '../../api/api';
+  import 'wepy-async-function';
+  import Tip from '../../utils/tip';
+  import {
+    toDecimal2,
+    timeImg,
+  } from '../../utils/util';
+  import {
+    getLocation,
+    calling,
+  } from '../../utils/wxCommen';
+  import SectionBox from '../../components/chatPage/sectionBox';
+  import BottomPack from '../../components/chatPage/bottomPack';
+  export default class chatPage extends wepy.page {
+    config = {
+      navigationBarTitleText: '松鼠邻家',
+    };
+    components = {
+      SectionBox,
+      BottomPack,
+    };
+    // 页面数据层
+    data = {
+      user: null,
+      chatBox: [],
+      inputmsg: '',
+      greetings: null,
+      isGreet: false,
+      greetingsWord: null,
+      clipboard: null,
+      // 选项的显示隐藏
+      temp: false,
+      loader: "hide",
+      toView: "",
+    };
+    methods = {
+      // 进入小区指南
+      _entryGuide() {
+        if (this.$parent.globalData.userInfo) {
+          wx.navigateTo({
+            url: '../guide/guide?pid=' + this.$parent.globalData.userInfo.pid + "&shop_name=" + this.$parent.globalData
+              .userInfo.shop_name
+          })
+        }
+      },
+      // 点击找优惠券按钮
+      _findCoupon() {
+        this.popup(0, {
+          content: ["帮我找隐藏优惠券"],
+          type: "user",
+          ctime: new Date().getTime(),
+          class: "userWord",
+        });
+        setTimeout((res) => {
+          let Getyq = Api.flzsYzrom + '/index.php/api/Getyq';
+          app.request("GET", Getyq, "", (res) => {
+            var data = res.data.data.data;
+            this.renderCoupon(data);
+          });
+        }, 1800)
+      },
+      // 进入物品借租页面
+      _entryBorrow(e) {
+        if (this.$parent.globalData.userInfo) {
+          wx.navigateTo({
+            url: "../borrow/borrow"
+          })
+        }
+      },
+      // 点击优惠券进入详情
+      couponToDetail(e) {
+        console.log(e.currentTarget.dataset.item)
+        // 断网处理
+        if (this.data.isOnline == false) {
+          this.networkOutage();
+          return;
+        }
+
+        var nid = e.currentTarget.dataset.item.nid;
+        if (nid.substr(0, 4) != '1000') {
+          nid = '1000' + nid;
+        }
+
+        wx.navigateTo({
+          // url: '../h5/h5?taokouling='+ e.currentTarget.dataset.item.data.newcoupon +'&nid=1000' + e.currentTarget.dataset.item.data.nid ,
+          url: '../h5/h5?nid=' + nid + '&taokouling=' + e.currentTarget.dataset.item.newcoupon
+        })
+      },
+      // 进入我的中心
+      _entryMine() {
+        if (this.$parent.globalData.userInfo) {
+          wx.navigateTo({
+            url: '../mine/mine'
+          })
+        }
+      },
+      // 进入会员
+      _entryVip() {
+        if (this.$parent.globalData.userInfo) {
+          wx.navigateTo({
+            url: '../vip/vip?pid=' + this.$parent.globalData.userInfo.pid + "&shop_name=" + this.$parent.globalData
+              .userInfo.shop_name
+          })
+        }
+      },
+      // 获取input值
+      valueInput(e) {
+        this.inputmsg = e.detail.value;
+      },
+      // 发送
+      bindButtonTap() {
+        console.log("123")
+        var keyword = this.data.inputmsg
+        if (keyword == "") return;
+        this.popup(0, {
+          content: [keyword],
+          ctime: new Date().getTime(),
+          type: "user",
+          class: "userWord"
+        })
+        this.data.inputmsg = "";
+        this.setData(this.data);
+        let randomSendCoupons = (array) => {
+          array.push(array.shift())
+          wx.setStorage({
+            key: keyword,
+            data: array
+          })
+          return array[array.length - 1]
+        }
+        var value = wx.getStorageSync(keyword)
+        // 缓存有商品数据
+        if (value) {
+          // let coupon = randomSendCoupons(value);
+          // console.log(coupon)
+          let coupon = value;
+          this.renderCoupon(coupon);
+        }
+        // 缓存没有商品数据
+        else {
+          if (keyword) {
+            var url = Api.setConfig.url + "/index.php?m=Api&c=search&a=index";
+            var data = {
+              token: Api.setConfig.token,
+              keyword: keyword,
+              pid: this.$parent.globalData.userInfo.pid,
+              uid: this.$parent.globalData.userInfo.id,
+            }
+            app.request("POST", url, data, (res) => {
+              console.log(res.data.data)
+              let keywordtype = res.data.data.keywordtype
+              let responseWay = {
+                // 物业
+                1: (res) => {
+                  this.popup(500, {
+                    content: res.data.data.data,
+                    type: "card",
+                    ctime: new Date().getTime(),
+                    class: "estate",
+                    keywordtype: 1
+                  })
+                },
+                // 通知
+                2: (res) => {
+                  this.popup(500, {
+                    content: res.data.data.data,
+                    type: "card",
+                    ctime: new Date().getTime(),
+                    class: "message",
+                    keywordtype: 2
+                  })
+                },
+                // 商品
+                3: (res) => {
+                  this.popup(500, {
+                    content: res.data.data.data,
+                    type: "card",
+                    ctime: new Date().getTime(),
+                    class: "goods",
+                    keywordtype: keywordtype
+                  })
+                },
+                // 优惠券
+                4: (res) => {
+                  // console.log(res.data.data.data)
+                  let coupons = res.data.data.data;
+
+                  try {
+                    wx.setStorageSync(keyword, coupons);
+                  } catch (e) {};
+                  wx.getStorage({
+                    key: keyword,
+                    success: (res) => {
+                      console.log(res.data)
+                      // let coupon = randomSendCoupons(res.data);
+                      let coupon = res.data;
+                      this.renderCoupon(coupon)
+                    }
+                  })
+                },
+                // 淘口令
+                5: (res) => {
+                  // console.log(res.data.data.data.data);
+                  if (res.data.data.data.data) {
+                    let coupon = res.data.data.data.data.data;
+                    this.renderCoupon(coupon)
+                  } else {
+                    this.popup(500, {
+                      content: ["没有优惠券"],
+                      type: "ai",
+                      ctime: new Date().getTime(),
+                      class: "aiWord",
+                      keywordtype: 5
+                    })
+                  }
+                },
+                // 接机器人
+                6: (res) => {
+                  this.popup(500, {
+                    content: [res.data.data.data.text],
+                    type: "ai",
+                    ctime: new Date().getTime(),
+                    class: "aiWord",
+                    keywordtype: 6
+                  })
+                },
+                // 小区指南
+                7: (res) => {
+                  this.popup(500, {
+                    content: res.data.data.data,
+                    type: "card",
+                    ctime: new Date().getTime(),
+                    class: "estate",
+                    keywordtype: 7
+                  })
+                },
+              }
+              responseWay[keywordtype](res);
+            })
+          }
+        }
+      },
+      // 进入定位地图
+      _entryLocation(e) {
+        // console.log(e.currentTarget.dataset.item)
+        wx.navigateTo({
+          url: '../guide/subpage/location/location?item=' + JSON.stringify(e.currentTarget.dataset.item)
+        })
+      },
+      // 进入小区新鲜事
+      entryFreshNews(e) {
+        // console.log(e.currentTarget.dataset.item.id);
+        wx.navigateTo({
+          url: '../guide/subpage/freshNews/freshNews?pid=' + this.$parent.globalData.userInfo.pid +
+            "&notice_id=" + e.currentTarget
+            .dataset.item.id,
+        })
+      },
+      // 进入借租物品详情
+      _entryDetail(e) {
+        console.log(e);
+        if (e.currentTarget.dataset.id) {
+          // console.log(e.target.dataset.id);      
+          wx.navigateTo({
+            url: "../borrow/subpage/borrow_detail/borrow_detail?id=" + e.currentTarget.dataset.id
+          })
+        } else {
+          // app._showtoast("点太快了~")
+        }
+
+      },
+      // 进入每日优鲜页面
+      _entryFreshEverday() {
+        wx.navigateTo({
+          url: "../h5/h5?agreementurl=" + Api.setConfig.url + "/h5/bns/index.html"
+        })
+      },
+      // 进入小区黄页
+      entryYellowPage(e) {
+        // console.log(e.target.dataset.id)
+        wx.navigateTo({
+          url: "../guide/subpage/yellowPage/yellowPage?data=" + JSON.stringify(e.target.dataset)
+        })
+      },
+      // 拨打电话
+      calling(e) {
+
+        app.calling(e.currentTarget.dataset.phone)
+      },
+      //转发给朋友
+      onShareAppMessage(res) {
+        // console.log(this.$parent.globalData.userInfo.shop_name);
+        var title = "介绍一下，" + this.$parent.globalData.userInfo.shop_name + "的小区管家"
+        var path = "pages/chatPage/chatPage";
+        if (res.from === 'button') {
+          let item = res.target.dataset.item
+          // 来自页面内转发按钮
+          if (res.target.dataset.from == "notifyEveryone") {
+            path = "/pages/chatPage/chatPage";
+            title = title;
+          }
+          // 物业分享
+          else if (res.target.dataset.from == "wuye") {
+            path = "/pages/chatPage/chatPage";
+            title = title;
+          }
+          // 通知
+          else if (res.target.dataset.from == "tongzhi") {
+            path = "pages/guide/subpage/freshNews/freshNews?pid=" + this.$parent.globalData.userInfo.pid +
+              "&notice_id=" + item.id +
+              "&share=1";
+            title = item.description;
+          }
+          // 商品
+          else if (res.target.dataset.from == "shangping") {
+            path = "pages/borrow/subpage/borrow_detail/borrow_detail?id=" + item.id + "&share=1";
+            title = '想要【' + item.title + '】？不用买，免费用！';
+          }
+          // 指南
+          else if (res.target.dataset.from == "zhinan") {
+            item.from = "data_list";
+            item.share = "1";
+            path = "pages/guide/subpage/yellowPage/yellowPage?data=" + JSON.stringify(item);
+            title = item.company;
+          }
+          // 优惠券
+          else if (res.target.dataset.from == "coupon") {
+            path = "pages/h5/h5?nid=1000" + item.nid + '&taokouling=' + item.newcoupon;
+            title = "这张优惠券不错！";
+          }
+        }
+        return {
+          title: title,
+          path: path,
+          imageUrl: '/pages/chatPage/images/share.jpg',
+          success: function (res) {
+            // 转发成功
+          },
+          fail: function (res) {
+            // 转发失败
+          }
+        }
+      },
+      // 上拉加载更多
+      loadMore() {
+        let ChatRecord = this.data.ChatRecord
+        this.data.loader = "show";
+        this.data.toView = "";
+        this.setData(this.data);
+        ChatRecord.loadMore((res) => {
+          if (res) {
+            this.data.chatBox = ChatRecord.userChatRecord.concat(this.data.chatBox);
+            setTimeout(() => {
+              this.data.loader = "hide";
+              this.popup();
+            }, 2000)
+          } else {
+            app._showtoast("没有更多聊天记录了！", "none");
+            setTimeout(() => {
+              this.data.loader = "hide";
+              this.popup();
+            }, 2000)
+          }
+
+        });
+      },
+    };
+    // 页面初始化
+    onLoad() {
+      // 登录
+      (new(this.login())).wxLogin((res) => {
+        // console.log(res)
+        let userInfo = res;
+        // 设置全局变量
+        this.$parent.globalData = res;
+        // 显示选项按钮                
+        this.data.temp = res.temp;
+        // 聊天记录
+        this.data.ChatRecord = new(this.ChatRecord())(userInfo);
+        // 设置计时器
+        this.data.greetings = new(timeImg())(120, 1000);
+        // 设置问候语规则
+        this.data.greetingsWord = new(this.gettingWord())();
+        // 设置粘贴板
+        this.data.clipboard = new(this.getClipboard())(userInfo);
+        // 获取聊天记录
+        this.data.ChatRecord._ObtainChatRecord((res) => {
+          // 老用户
+          if (res) {
+            this.data.chatBox = res.concat(this.data.chatBox)
+            this.popup(500, null);
+            this.popup(0, {
+              content: [],
+              type: 'new_msg',
+              ctime: new Date().getTime(),
+              class: "new_msgclass",
+            });
+            // 发问候语
+            this.data.greetingsWord.radomWord((res) => {
+              console.log(res)
+              this.popup(500, {
+                content: [res],
+                type: 'ai',
+                ctime: new Date().getTime(),
+                class: "aiWord",
+              });
+              this.popup(1000, {
+                content: ["有什么需要的，小松果一直都在。"],
+                type: 'ai',
+                ctime: new Date().getTime(),
+                class: "aiWord",
+              });
+              this.data.isGreet = false;
+            });
+          }
+          // 新用户
+          else {
+            this.popup(500, {
+              content: ["Hi，" + userInfo.nickname + "，初次见面。"],
+              ctime: new Date().getTime(),
+              type: "ai",
+              class: "aiWord"
+            })
+            this.popup(1000, {
+              content: ["我是小松果，您的专属小区管家。", "关于" + userInfo.shop_name +
+                "的一切，我都知道哦~",
+                "点击下面的按钮，解锁更多功能。"
+              ],
+              ctime: new Date().getTime(),
+              type: "ai",
+              class: "aiWord"
+            })
+          }
+        });
+        // 获取粘贴板并处理
+        this.disposeClipboard();
+      });
+    }; 
+    // 每次页面进入
+    onShow() {
+      // 清除打招呼计时器
+      if (this.data.greetings) this.data.greetings.clearTime();
+      // 发问候语
+      if (this.data.isGreet) this.data.greetingsWord.radomWord((res) => {
+        // console.log(res)
+        this.popup(500, {
+          content: [res],
+          type: 'ai',
+          ctime: new Date().getTime(),
+          class: "aiWord",
+        });
+        this.popup(1000, {
+          content: ["有什么需要的，小松果一直都在。"],
+          type: 'ai',
+          ctime: new Date().getTime(),
+          class: "aiWord",
+        });
+        this.data.isGreet = false;
+      });
+      // 获取粘贴板并处理
+      this.disposeClipboard();
+    };
+    // 页面隐藏
+    onHide() {
+      // 开始问候语计时
+      if (this.data.greetings) this.data.greetings.setTime(() => {
+        console.log("发问候语")
+        this.data.isGreet = true;
+      });
+      // 上传用户聊天记录
+      if (this.data.ChatRecord) this.data.ChatRecord._uploadChatRecord(this.data.chatBox);
+    };
+    // computed = {};
+    // events = {};
+    // 登录
+    login() {
+      return class userLogin {
+        constructor() {
+          this.strs = [];
+          this.userInfo = null;
+          this.callback = null;
+        };
+        // 弹出确认框
+        showModal(callback = function () {}) {
+          wx.showModal({
+            title: '警告',
+            content: '您点击了拒绝授权,将无法正常显示个人信息,点击确定重新获取授权。',
+            success: (res) => {
+              // 用户确认
+              if (res.confirm) {
+                wx.openSetting({
+                  success: (res) => {
+                    // 用户已经授权
+                    if (res.authSetting["scope.userInfo"]) {
+                      this.wxLogin((res) => {
+                        console.log(this.callback)
+                        this.callback(res)
+                      })
+                    }
+                    // 用户还没授权
+                    else {
+                      this.showModal();
+                    }
+                  }
+                });
+              }
+              // 用户拒绝
+              else {
+                this.showModal();
+              }
+            }
+          })
+        }
+        // 获取用户信息
+        getUserInfo(code, callback = function () {}) {
+          wx.getUserInfo({
+            success: async (data) => {
+              var data = {
+                code: code,
+                userInfo: JSON.stringify(data.userInfo),
+                encryptedData: data.encryptedData,
+                iv: data.iv,
+                temp: 1
+              }
+              // 登录
+              let res = await Api.login({
+                query: data,
+                method: "POST"
+              })
+              this.userInfo = res.data.data;
+              callback(this.userInfo)
+            },
+            fail: (res) => {
+              console.log("获取用户信息失败");
+              this.callback = callback;
+              this.showModal();
+            }
+          })
+        }
+        // 获取登录code
+        wxLogin(callback = function () {}) {
+          wx.login({
+            success: (res) => {
+              if (res.code) {
+                let code = res.code;
+                this.getUserInfo(code, callback);
+              } else {
+                app._showtoast('获取不到用户code', "none");
+                return false;
+              }
+            }
+          })
+        };
+      }
+    };
+    // 聊天上传下载系统
+    ChatRecord() {
+      return class ChatRecord {
+        constructor(userInfo) {
+          this.chattingBranches = 0;
+          this.param = {
+            pid: userInfo.pid,
+            uid: userInfo.id,
+            usersay: "" || null,
+          };
+          this.userChatRecord = null;
+          // 获取历史记录次数
+          this.time = 0;
+          // 全部的聊天记录
+          this.allChat = [];
+          // 是否可以继续获取聊天记录
+          this.flag = true;
+        };
+        // 上传聊天记录
+        async _uploadChatRecord(chatBox) {
+          let usersay = chatBox.slice();
+          let usersayLen = usersay.length;
+          // console.log(usersayLen)
+          // console.log(this.chattingBranches)
+          if (usersayLen == this.chattingBranches) {
+            console.log("没有新的聊天记录上传")
+          } else {
+            this.param.usersay = JSON.stringify(usersay.splice(this.chattingBranches, usersayLen - this.chattingBranches));
+            let res = await Api.uploadUserChat({
+              query: this.param,
+              method: "POST"
+            });
+            console.log("上传新的聊天记录");
+            console.log(res);
+            this.chattingBranches = usersayLen;
+          }
+
+        }
+        // 获取聊天记录
+        async _ObtainChatRecord(callback = function () {}) {
+          let res = await Api.downloadUserChat({
+            query: this.param,
+            method: "POST",
+          });
+          console.log(res);
+          this.allChat = res.data.data;
+          if (res.data.error == "ok") {
+            this.userChatRecord = JSON.parse(res.data.data[0].usersay);
+            this.chattingBranches = JSON.parse(res.data.data[0].usersay).length;
+            this.time++;
+            callback(this.userChatRecord);
+          } else {
+            callback(false);
+          }
+        }
+        // 加载更多聊天记录
+        loadMore(callback = function () {}) {
+          console.log("加载更多聊天记录。。。");
+          // console.log(this.allChat);
+          if (this.allChat.length == this.time) this.flag = false;
+          if (this.flag) {
+            this.userChatRecord = JSON.parse(this.allChat[this.time].usersay);
+            this.time++;
+            console.log(this.userChatRecord);
+            callback(true);
+          } else {
+            callback(false);
+          }
+
+        }
+      }
+    };
+    // 弹出效果
+    popup(time, obj) {
+      // 对话的滚动
+      let textScroll = () => {
+        this.data.toView = "to" + this.data.chatBox.length;
+      };
+      // 动画封装
+      let rotateAndScaleThenTranslate = () => {
+        // 先旋转同时放大，然后平移
+        var animation = wx.createAnimation({
+          duration: 500,
+          timingFunction: 'ease',
+        })
+        this.animation = animation
+        this.animation.opacity(1).translateY(-120).step({
+          duration: 500,
+          timingFunction: "ease"
+        });
+        this.setData({
+          animationData: this.animation.export()
+        })
+        this.setData({
+          animationData: animation.export()
+        })
+      };
+      setTimeout(() => {
+        if (obj) {
+          this.data.chatBox.push(obj);
+          this.setData(this.data);
+        }
+        if (time) {
+          textScroll();
+        }
+        rotateAndScaleThenTranslate();
+      }, time)
+    };
+    // 问候语
+    gettingWord() {
+      return class gettingWord {
+        constructor() {
+          this.word = "";
+          this.flag = true;
+          this.getTutorialsTime = 1;
+        };
+        async getWelmsg(callback = function () {}) {
+          let res = await Api.getWelmsg({
+            query: "",
+            method: "GET"
+          })
+          var msg = res.data.data;
+          msg = msg.replace('小优', '小松果');
+          this.word = msg;
+          callback(this.word);
+        };
+        async getTutorials(callback = function () {}) {
+          let data = {
+            id: this.getTutorialsTime,
+          }
+          let res = await Api.getTutorials({
+            query: data,
+            method: "POST"
+          });
+          this.word = res.data.data;
+          callback(this.word)
+          if (this.getTutorialsTime == 5) return this.getTutorialsTime = 1
+          this.getTutorialsTime++;
+        };
+        radomWord(callback = function () {}) {
+          if (this.flag) {
+            this.getWelmsg(callback);
+            this.flag = false
+          } else {
+            this.getTutorials(callback);
+            this.flag = true
+          }
+        };
+      }
+    };
+    // 用户粘贴板
+    getClipboard() {
+      return class clipboard {
+        constructor(userInfo) {
+          this.key = " ";
+          this.responseData = null;
+          this.userInfo = userInfo;
+        };
+        // 获取粘贴板内容
+        getClipboard(callback = function () {}) {
+          wx.getClipboardData({
+            success: (res) => {
+              this.key = res.data;
+              if (this.key.indexOf("￥") != -1 && this.key.lastIndexOf("￥") != -1) {
+                callback(this.key);
+              }
+            }
+          })
+        };
+        // 请求内容
+        async request(callback = function () {}) {
+          let data = {
+            keyword: this.key,
+            pid: this.userInfo.pid,
+            uid: this.userInfo.id,
+          };
+          let res = await Api.getClipboardData({
+            query: data,
+            method: "POST"
+          })
+
+          if (res.data.error == "ok") {
+            this.responseData = res.data.data;
+            await callback(this.responseData);
+            // 清空剪贴板
+            wx.setClipboardData({
+              data: ' '
+            })
+          } else {
+
+          }
+
+
+        };
+      };
+    };
+    // 粘贴板的内容处理
+    disposeClipboard() {
+      if (this.data.clipboard) this.data.clipboard.getClipboard((res) => {
+        this.data.clipboard.request((res) => {
+          let keywordtype = res.keywordtype
+          let data = res.data.data.data
+          // 淘口令
+          if (keywordtype == 5) {
+            this.popup(0, {
+              content: ["检测到剪贴板有淘口令"],
+              type: "ai",
+              ctime: new Date().getTime(),
+              class: "aiWord"
+            });
+            //优惠券有数据
+            if (data) {
+              this.renderCoupon(data);
+            }
+            // 优惠券没数据
+            else {
+              this.popup(500, {
+                content: ["没有优惠券！"],
+                type: "ai",
+                ctime: new Date().getTime(),
+                class: "aiWord"
+              });
+            }
+          }
+        })
+      })
+      else {
+        return;
+      }
+    };
+    // 渲染优惠券
+    renderCoupon(data) {
+      if (data.length > 0) {
+        var n = parseInt(Math.random() * 10); //随机数 
+        data = data[n]; //循环
+      }
+      // 当前价
+      const currentPirce = data.discountprice - data.ulanprice;
+      // 优惠券面额
+      const ulanprice = data.ulanprice
+      // 返利金额
+      const commission = data.commission;
+      // 优惠券状态
+      const couponStatus = data.couponStatus;
+      // 商品查询历史价格的nid
+      const nid = data.nid;
+      // 原价
+      const oldprice = data.oldprice
+      // 历史价格
+      var pirce = [];
+
+      data.pic = data.pic.replace('75x75', '150x150');
+
+      var pic = data.pic;
+      if (pic.substring(0, 2) == '//') {
+        data.pic = 'https:' + data.pic;
+      }
+      // 原价
+      data.oldprice = toDecimal2(oldprice);
+
+      // 优惠金额
+      data.ulanprice != "" ? data.ulanprice = parseInt(ulanprice) || data.couponcount : ulanprice;
+      // 券后价
+
+      data.newpirce = toDecimal2(oldprice - ulanprice) || data.price;
+      if (data.discountprice == undefined) {
+        data.discountprice = data.oldprice;
+      }
+      if (data.newpirce == undefined) {
+        data.newpirce = toDecimal2(data.discountprice - data.ulanprice);
+
+      }
+
+      // 有券有返利 
+      if (data.ulanprice != '' && data.commission > 0) {
+        data.couponStatus = "botn_money_coupon"
+      }
+      // 有券没返利
+      else if (data.ulanprice != '' && data.commission == 0) {
+        data.couponStatus = "coupon_no_money"
+      }
+      // 没券有返利
+      else if (data.ulanprice == "" && data.commission > 0) {
+        data.couponStatus = "money_no_coupon"
+      }
+
+      // 标签 
+      data.type = "coupon";
+      // 样式
+      data.class = "couponCard";
+
+      data.couponStatus = "coupon_no_money"
+
+      //优惠券没数据
+      if (data.length == 0) {
+        this.popup(0, {
+          content: [this.data.strs[3]],
+          type: "ai",
+          ctime: new Date().getTime(),
+          class: "aiWord"
+        });
+        return;
+      }
+      // 优惠券有数据
+      else {
+        this.popup(500, {
+          content: ["主人，打开淘宝、天猫客户端，找到喜欢的商品，复制商品链接（淘口令）。回到微信打开松鼠邻家小程序，小松果自动帮您找优惠哦~"],
+          type: "ai",
+          ctime: new Date().getTime(),
+          class: "aiWord"
+        });
+        this.popup(1000, {
+          content: ["主人，先看看这张优惠券，还不错哦~"],
+          type: "ai",
+          ctime: new Date().getTime(),
+          class: "aiWord"
+        });
+        data.ctime = new Date().getTime()
+        this.popup(1500, data);
+      }
+    };
+  };
+</script>
+<style lang="less">
+  /* 首页进入部分 */
+  .section {
+    height: 100%;
+    overflow: hidden;
+    padding: 0 28rpx;
+    background-color: #f5f5f6;
+    border-top: 1px solid #ddd;
+    box-sizing: border-box; // 上拉加载的动画
+    .loader {
+      @-webkit-keyframes scale {
+        0% {
+          -webkit-transform: scale(1);
+          transform: scale(1);
+          opacity: 1;
+        }
+        45% {
+          -webkit-transform: scale(0.1);
+          transform: scale(0.1);
+          opacity: 0.7;
+        }
+        80% {
+          -webkit-transform: scale(1);
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      @keyframes scale {
+        0% {
+          -webkit-transform: scale(1);
+          transform: scale(1);
+          opacity: 1;
+        }
+        45% {
+          -webkit-transform: scale(0.1);
+          transform: scale(0.1);
+          opacity: 0.7;
+        }
+        80% {
+          -webkit-transform: scale(1);
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      @-webkit-keyframes show {
+        0% {
+          height: 0px;
+        }
+        100% {
+          height: 40rpx;
+        }
+      }
+      .show {
+        -webkit-animation: show 0s 0s infinite cubic-bezier(.2, .68, .18, 1.08);
+        -webkit-animation-iteration-count: 1;
+        overflow: hidden;
+      }
+      .hide {
+        height: 0;
+        overflow: hidden;
+      }
+      .ball-pulse>view:nth-child(0) {
+        -webkit-animation: scale 0.75s 0s infinite cubic-bezier(.2, .68, .18, 1.08);
+        animation: scale 0.75s 0s infinite cubic-bezier(.2, .68, .18, 1.08);
+      }
+      .ball-pulse>view:nth-child(1) {
+        -webkit-animation: scale 0.75s 0.12s infinite cubic-bezier(.2, .68, .18, 1.08);
+        animation: scale 0.75s 0.12s infinite cubic-bezier(.2, .68, .18, 1.08);
+      }
+      .ball-pulse>view:nth-child(2) {
+        -webkit-animation: scale 0.75s 0.24s infinite cubic-bezier(.2, .68, .18, 1.08);
+        animation: scale 0.75s 0.24s infinite cubic-bezier(.2, .68, .18, 1.08);
+      }
+      .ball-pulse>view:nth-child(3) {
+        -webkit-animation: scale 0.75s 0.36s infinite cubic-bezier(.2, .68, .18, 1.08);
+        animation: scale 0.75s 0.36s infinite cubic-bezier(.2, .68, .18, 1.08);
+      }
+      .ball-pulse>view {
+        background-color: #FFD203;
+        width: 30rpx;
+        height: 30rpx;
+        border-radius: 100%;
+        margin: 4rpx;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+        display: inline-block;
+      }
+    }
+    /* 聊天框部分 */
+    .sectionBox {
+      height: 100%;
+      width: 100%;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      .BOX {
+        &:nth-of-type(1) {
+          margin-top: 270rpx;
+        }
+      }
+      /* 机器人回复 */
+      .aiWord {
+        position: relative;
+        width: 100%;
+        float: left;
+        margin: 16rpx 0;
+        >view {
+          max-width: 78.8%;
+          position: relative;
+          float: left;
+          box-sizing: border-box;
+          padding: 24rpx 32rpx;
+          font-size: 28rpx;
+          line-height: 40rpx;
+          background-color: white;
+          border-radius: 20rpx 20rpx 20rpx 6rpx;
+          display: inline-block;
+          color: #333;
+          display: flex;
+          flex-direction: column;
+        }
+      }
+      /* 用户回复 */
+      .userWord {
+        position: relative;
+        width: 100%;
+        float: right;
+        margin: 16rpx 0;
+        >view {
+          max-width: 67.8%;
+          position: relative;
+          float: right;
+          padding: 24rpx 32rpx;
+          font-size: 28rpx;
+          background-color: #FFD203;
+          border-radius: 20rpx 20rpx 6rpx 20rpx;
+          display: inline-block;
+          /* margin: 28rpx 0; */
+          color: #f5f5f6;
+          white-space: wrap;
+        }
+      }
+      /* 物业卡片 */
+      .estate,
+      .message {
+        border-radius: 6rpx;
+        width: 673rpx;
+        float: left;
+        margin: 16rpx 0;
+        overflow: hidden; // box-shadow: 5rpx 5rpx 10rpx #ccc;
+        .estate_title {
+          width: 100%;
+          height: 140rpx;
+          display: flex;
+          flex-direction: row;
+          background: #fec128; // border-top-left-radius: 6rpx;
+          // border-top-right-radius: 6rpx;
+          image {
+            // margin: 40rpx 25rpx 0 19rpx;
+            height: 52rpx;
+            width: 52rpx;
+            margin-right: 25rpx;
+            margin-left: 19rpx;
+          }
+          .estate_name {
+            // padding-top: 35rpx;
+            // padding-bottom: 36rpx;
+            >text {
+              &:first-of-type {
+                font-size: 32rpx;
+                line-height: 32rpx;
+                color: #333;
+                font-weight: bold;
+              }
+              &:last-of-type {
+                display: block;
+                font-size: 26rpx;
+                line-height: 26rpx;
+                color: #333;
+                margin-top: 15rpx;
+              }
+            }
+          }
+        }
+        .estate_info {
+          padding: 60rpx 50rpx 60rpx 30rpx;
+          background: #fff;
+          .estate_item {
+            position: relative;
+            text {
+              font-size: 24rpx;
+              color: #333;
+              vertical-align: middle;
+            }
+            &:nth-child(2) {
+              margin-top: 40rpx;
+            }
+            .estate_icon {
+              height: 27rpx;
+              width: 27rpx;
+              margin-right: 25rpx;
+              vertical-align: middle;
+            }
+            .estate_more {
+              position: absolute;
+              top: 15rpx;
+              right: 0;
+              height: 23rpx;
+              width: 15rpx;
+              vertical-align: middle;
+            }
+          }
+        }
+        .message_warp {
+          padding: 40rpx 0 40rpx 92rpx;
+          background: #fff;
+          border-bottom-left-radius: 6rpx;
+          border-bottom-right-radius: 6rpx;
+          font-size: 24rpx;
+          color: #333;
+          box-sizing: border-box;
+          >view:nth-child(2n) {
+            margin-top: 30rpx;
+          }
+        }
+        .zhuanfa {
+          float: left;
+          margin-top: 10rpx;
+          width: 150rpx;
+          height: 50rpx;
+          border: 1rpx solid #fec128;
+          padding: 0;
+          font-size: 25rpx;
+          line-height: 50rpx;
+          text-align: center;
+          color: #fec128;
+        }
+      }
+      /* 借租商品 */
+      .goods {
+        font-size: 26rpx;
+        border-radius: 6rpx;
+        margin-top: 30rpx;
+        border-radius: 6rpx;
+        width: 673rpx;
+        float: left;
+        margin: 16rpx 0;
+        overflow: hidden;
+        .goodsContent {
+          display: flex;
+          flex-direction: row;
+          padding: 25rpx 0;
+          background: #fec128;
+          color: #666;
+          font-size: 26rpx;
+          border-top-left-radius: 6rpx;
+          border-top-right-radius: 6rpx;
+          box-shadow: 5rpx 5rpx 10rpx #ccc;
+          .img {
+            padding: 0 30rpx 0 25rpx;
+            width: 128rpx;
+            height: 128rpx;
+          }
+          .goods_name {
+            position: relative;
+            color: #333; // width: 100%;
+            font-weight: bold;
+          }
+        }
+        .price_warp {
+          display: flex;
+          padding: 37rpx 0;
+          background: #fff;
+          .price {
+            flex: 1;
+            text-align: center;
+            &:nth-child(1) {
+              border-right: 2rpx dashed #fec128;
+            }
+            .price_time {
+              margin-top: 54rpx;
+              font-size: 24rpx;
+              color: #fec128;
+              text {
+                color: #ff6600;
+              }
+              image {
+                margin-left: 5rpx;
+                vertical-align: middle;
+                height: 30rpx;
+                width: 100rpx;
+              }
+            }
+          }
+        }
+        .zhuanfa {
+          float: left;
+          margin-top: 10rpx;
+          width: 150rpx;
+          height: 50rpx;
+          border: 1rpx solid #fec128;
+          padding: 0;
+          font-size: 25rpx;
+          line-height: 50rpx;
+          text-align: center;
+          color: #fec128;
+        }
+      }
+      /* 优惠卷 */
+      .couponCard {
+        position: relative;
+        display: inline-block;
+        margin: 12rpx 0;
+        width: 694rpx;
+        .coupon_no_money {
+          width: 100%;
+          height: 186rpx;
+        }
+        .comment {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-around;
+          position: relative;
+          z-index: 2;
+          .background {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+          }
+          .money_no_coupon_Left {
+            width: 100%;
+          }
+          .left {
+            position: absolute;
+            left: 0;
+            height: 100%;
+            width: 440rpx;
+            display: flex;
+            flex-direction: row;
+            padding: 12rpx;
+            padding-right: 16rpx;
+            box-sizing: border-box;
+            .pic {
+              width: 140rpx;
+              height: 140rpx;
+              z-index: 2;
+            }
+            .content {
+              display: flex;
+              flex-direction: column;
+              justify-content: space-around;
+              width: 370rpx;
+              height: 163rpx;
+              z-index: 2;
+              padding: 0 32rpx 22rpx 16rpx;
+              box-sizing: border-box;
+              >text {
+                line-height: 46rpx;
+                &:nth-of-type(1) {
+                  -webkit-line-clamp: 2;
+                  font-weight: 400;
+                  font-size: 22rpx;
+                  color: #fff;
+                  display: -webkit-box;
+                  line-height: 27rpx;
+                  word-break: break-all;
+                  -webkit-box-orient: vertical;
+                  overflow: hidden;
+                  position: absolute;
+                  top: 10rpx;
+                }
+                ;
+                &:nth-of-type(2) {
+                  font-size: 24rpx;
+                  color: #fff;
+                  margin-top: 30rpx;
+                  text-decoration: line-through;
+                }
+                ;
+                &:nth-of-type(3) {
+                  position: absolute;
+                  bottom: 16rpx;
+                  text {
+                    float: left;
+                    &:first-of-type {
+                      display: inline-block;
+                      width: 78rpx;
+                      margin-right: 12rpx;
+                      font-size: 18rpx;
+                      line-height: 26rpx;
+                      color: #020202;
+                      background-color: #FFD203;
+                      border-radius: 15rpx;
+                      line-height: 30rpx;
+                      text-align: center;
+                    }
+                    &:last-of-type {
+                      font-size: 30rpx;
+                      line-height: 30rpx;
+                      color: #fff;
+                    }
+                    &:nth-of-type(3) {
+                      font-size: 28rpx;
+                      line-height: 28rpx;
+                      text-decoration: line-through;
+                      color: #afafaf;
+                      margin-left: 32rpx;
+                    }
+                  }
+                }
+              }
+            }
+          }
+          .right {
+            z-index: 2;
+            position: absolute;
+            right: 0;
+            height: 100%;
+            width: 250rpx;
+            >view {
+              &:first-of-type {
+                >text {
+                  color: #FFF;
+                  &:first-of-type {
+                    font-size: 30rpx;
+                  }
+                  &:last-of-type {
+                    font-size: 40rpx;
+                    font-weight: 800;
+                    line-height: 40rpx
+                  }
+                }
+              }
+              &:last-of-type {
+                font-size: 30rpx;
+                color: #FFF;
+                line-height: 30rpx;
+                margin-top: 25rpx;
+              }
+            }
+          }
+          .bottom {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            font-size: 26rpx;
+            padding-left: 21rpx;
+            box-sizing: border-box;
+          }
+        }
+        .zhuanfa {
+          float: left;
+          margin-top: 10rpx;
+          width: 150rpx;
+          height: 50rpx;
+          border: 1rpx solid #fec128;
+          padding: 0;
+          font-size: 25rpx;
+          line-height: 50rpx;
+          text-align: center;
+          color: #fec128;
+        }
+      }
+    }
+    /* 底部部分 */
+    .bottomPack {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      z-index: 3;
+      .Wallet {
+        position: fixed;
+        bottom: 210rpx;
+        right: 20rpx;
+        height: 108rpx;
+        width: 108rpx;
+        line-height: 108rpx;
+        text-align: center;
+        font-size: 28rpx;
+        color: #fff;
+        margin: 0 8rpx 54rpx 0;
+        border-radius: 50%;
+        background-color: #fec128;
+        image {
+          width: 108rpx;
+          height: 108rpx;
+          float: right;
+        }
+      }
+      .optionBox {
+        height: 75rpx;
+        width: 100%;
+        .option {
+          position: absolute;
+          z-index: 1;
+          overflow: hidden;
+          white-space: nowrap;
+          view {
+            padding: 0 28rpx;
+            font-size: 28rpx;
+            height: 64rpx;
+            text-align: center;
+            line-height: 64rpx;
+            margin-right: 12rpx;
+            background-color: white;
+            display: inline-block;
+            border-radius: 50rpx;
+            &:first-of-type {
+              margin-left: 28rpx;
+            }
+          }
+        }
+      }
+      >form {
+        /* 输入框 */
+        .search {
+          position: relative;
+          width: 100%;
+          height: 100rpx;
+          z-index: 1;
+          background-color: white;
+          display: flex;
+          flex-direction: row;
+          >input {
+            width: 564rpx;
+            height: 72rpx;
+            font-size: 32rpx;
+            color: #333;
+            border-radius: 8rpx;
+            border-width: 1;
+            border: 1px solid #e6e6e6;
+            box-sizing: border-box;
+            margin: 14rpx 26rpx 14rpx 28rpx;
+            padding-left: 16rpx;
+          }
+          .btn-area {
+            width: 104rpx;
+            height: 72rpx;
+            font-size: 28rpx;
+            color: #fff;
+            text-align: center;
+            border-radius: 12rpx;
+            line-height: 72rpx;
+            z-index: 2;
+            background-color: #FFD203;
+            margin: 14rpx 28rpx 14rpx 0;
+            padding: 0;
+          }
+        }
+      }
+    }
+  }
+</style>

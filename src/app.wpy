@@ -1,0 +1,43 @@
+<style lang="less">
+    @import './styles/common.wxss';
+</style>
+
+
+<script>
+  import wepy from 'wepy';
+  import 'wepy-async-function';
+  export default class extends wepy.app {
+    config = {
+      pages: [
+        'pages/chatPage/chatPage',
+        'pages/borrow/borrow',
+        'pages/guide/guide',
+        'pages/h5/h5',
+        'pages/login/login'
+      ],
+      window: {
+        backgroundTextStyle: 'light',
+        navigationBarBackgroundColor: '#fff',
+        navigationBarTitleText: 'WeChat',
+        navigationBarTextStyle: 'black',
+        enablePullDownRefresh: false
+      },
+    }
+
+    globalData = {
+      userInfo: null,
+      location: null,
+    }
+
+    constructor() {
+      super();
+      this.use('requestfix');
+      this.use('promisify');
+    }
+
+    async onLaunch() {
+
+    }
+  }
+
+</script>

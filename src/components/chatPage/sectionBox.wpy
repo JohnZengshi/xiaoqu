@@ -1,0 +1,207 @@
+<template>
+  <scroll-view class='sectionBox' id='scrollBox' data-id='scrollBox' scroll-y="true" style="margin-bottom: 40px;" scroll-into-view="{{toView}}"
+    bindscrolltoupper="loadMore">
+    <repeat for="{{chatBox}}" key="item" for-index="index">
+      <view id='to{{index+1}}' class="BOX {{item.class}}" animation="{{animationData}}">
+
+        <view wx:if="{{item.type == 'ai' || item.type == 'user'}}">
+          <text wx:for="{{item.content}}" wx:for-item="items" wx:key="key">{{items}}</text>
+        </view>
+
+        <block wx:if="item.type == 'coupon'">
+
+          <!-- 有券有返利 -->
+          <view class="botn_money_coupon" wx:if="{{item.couponStatus == 'botn_money_coupon'}}">
+            <image class='background' src='./images/botn_money_coupon.png'></image>
+            <view catchtap='couponToDetail' data-item="{{item}}" class='comment'>
+              <view class='left'>
+                <view class='pic'>
+                  <image style="width:140rpx; height: 140rpx;border-radius: 8rpx;" mode='aspectFill' src="{{item.pic}}"></image>
+                </view>
+                <view class='content'>
+                  <text>{{item.title}}</text>
+                  <text>
+                    <text>券后价</text>
+                    <text>
+                      <text style='margin-right:0;'>￥</text>
+                      <text>{{item.newpirce}}</text>
+                    </text>
+                  </text>
+                </view>
+              </view>
+              <view class='right'>
+                <text>
+                  <text style='font-size: 26rpx;'>￥</text>
+                  <text style='font-size: 44rpx;font-weight: 800;line-height:44rpx'>{{item.ulanprice}}</text>
+                </text>
+              </view>
+              <view class='bottom botn_money_coupon'>
+                <text>领券购买、确认收货，预计可领</text>
+                <text>￥{{item.commission}}</text>
+                <text>现金返利红包</text>
+              </view>
+            </view>
+          </view>
+
+          <!-- 有券无返利 -->
+          <view class="coupon_no_money" wx:if="{{item.couponStatus == 'coupon_no_money'}}">
+            <image class='background' src='./images/coupon_no_money.png'></image>
+            <view catchtap='couponToDetail' data-item="{{item}}" class='comment'>
+              <view class='left'>
+                <view class='pic'>
+                  <image style="width:140rpx; height: 140rpx;border-radius: 8rpx;" mode='aspectFill' src="{{item.pic}}"></image>
+                </view>
+                <view class='content'>
+                  <text>{{item.title}}</text>
+                  <text>
+                    <text>券后价</text>
+                    <text>
+                      <text style='margin-right:0;'>￥</text>
+                      <text>{{item.newpirce}}</text>
+                    </text>
+                    <!-- <text>{{item.data.discountprice}}</text> -->
+                  </text>
+                </view>
+              </view>
+              <view class='right'>
+                <text>
+                  <text style='font-size: 26rpx;'>￥</text>
+                  <text style='font-size: 44rpx;font-weight: 800;line-height:44rpx'>{{item.ulanprice}}</text>
+                </text>
+              </view>
+            </view>
+          </view>
+
+          <!-- 无券有返利 -->
+          <view class="money_no_coupon" wx:if="{{item.couponStatus == 'money_no_coupon'}}">
+            <image class='background' src='./images/money_no_coupon.png'></image>
+            <view catchtap='couponToDetail' data-item="{{item}}" class='comment'>
+              <view class='left money_no_coupon_Left'>
+                <view class='pic'>
+                  <image style="width:140rpx; height: 140rpx;border-radius: 8rpx;" mode='aspectFill' src="{{item.pic}}"></image>
+                </view>
+                <view class='content money_no_coupon'>
+                  <text>{{item.title}}</text>
+                  <text>
+                    <text>原价:￥{{item.discountprice}}</text>
+                  </text>
+                </view>
+              </view>
+              <view class='bottom money_no_coupon'>
+                <image src='./images/rebate_money.png'></image>
+                <view class='content'>
+                  <view>
+                    <text>1.复制淘口令,去淘宝下单购买</text>
+                  </view>
+                  <view>
+                    <text>2.确认收货，预计领</text>
+                    <text>￥{{item.commission}}</text>
+                    <text>现金返利红包</text>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+
+        </block>
+      </view>
+    </repeat>
+  </scroll-view>
+</template>
+<script>
+  import wepy from 'wepy';
+  import 'wepy-async-function';
+  export default class sectionBox extends wepy.component {
+    data = {
+      chatBox: [],
+      animation: null,
+      animationData: {},
+    }
+    // 对话的滚动
+    textScroll() {
+      this.toView = "to" + this.chatBox.length;
+    }
+    rotateAndScaleThenTranslate() {
+      this.animation = null;
+      this.animationData = {};
+      // 先旋转同时放大，然后平移
+      this.animation = wx.createAnimation({
+        duration: 500,
+        timingFunction: 'ease',
+      }).opacity(1).translateY(-120).step({
+        duration: 500,
+        timingFunction: "ease"
+      });
+      this.$apply()
+      this.animationData = this.animation.export()
+    }
+    // 弹出效果
+    popup(time, obj) {
+      setTimeout(() => {
+        if (obj) this.chatBox.push(obj)
+        this.textScroll();
+        this.rotateAndScaleThenTranslate();
+        this.$apply()
+      }, time)
+    }
+    onLoad() {
+      // console.log(this.title)
+    }
+    methods = {}
+    props = {
+      // 静态传值
+      title: String,
+
+      // 父向子单向动态传值
+      syncTitle: {
+        type: String,
+        default: 'null'
+      },
+
+      twoWayTitle: {
+        type: Number,
+        default: 'nothing',
+        twoWay: true
+      }
+    };
+  }
+
+</script>
+
+<style lang="less">
+  .sectionBox {
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+
+    .BOX {
+      &:nth-of-type(1) {
+        margin-top: 270rpx;
+      }
+    }
+    .aiWord {
+      position: relative;
+      width: 100%;
+      float: left;
+      margin: 16rpx 0;
+      >view {
+        max-width: 78.8%;
+        position: relative;
+        float: left;
+        box-sizing: border-box;
+        padding: 24rpx 32rpx;
+        font-size: 28rpx;
+        line-height: 40rpx;
+        background-color: white;
+        border-radius: 20rpx 20rpx 20rpx 6rpx;
+        display: inline-block;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+
+</style>

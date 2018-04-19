@@ -1,0 +1,14 @@
+<template>
+  <view>h5页面</view>
+</template>
+<script>
+import wepy from 'wepy'
+export default class h5 extends wepy.page {
+  
+}
+</script>
+<style lang="less">
+    
+</style>
+
+
