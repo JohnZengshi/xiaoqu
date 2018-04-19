@@ -215,7 +215,7 @@
           <view class='freshEverday' wx:if="{{temp}}" catchtap="_entryFreshEverday">每日优选</view>
         </scroll-view>
       </view>
-      <form @submit.stop="formSubmit" report-submit>
+      <form @submit="formSubmit" report-submit>
         <view class="search">
           <input placeholder="我想要……" @input="valueInput" value="{{inputmsg}}"/>
           <button type="default" class="btn-area" @tap.stop="bindButtonTap">发送</button>
