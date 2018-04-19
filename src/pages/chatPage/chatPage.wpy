@@ -337,7 +337,6 @@
       },
       // 发送
       bindButtonTap() {
-        console.log("123")
         var keyword = this.data.inputmsg
         if (keyword == "") return;
         this.popup(0, {
