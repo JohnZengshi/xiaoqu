@@ -13,8 +13,7 @@
         'pages/borrow/borrow',
         'pages/guide/guide',
         'pages/h5/h5',
-        'pages/login/login',
-        'pages/mine/mine'
+        'pages/login/login'
       ],
       window: {
         backgroundTextStyle: 'light',

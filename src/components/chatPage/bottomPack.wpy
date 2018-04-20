@@ -5,17 +5,16 @@
     </view>
     <view class='optionBox'>
       <scroll-view class='option' data-id='option' scroll-x="true">
-        <view style="background-color:#FEC128;" @tap.stop="_entryVip">会员</view>
+        <view class='' @tap.stop="_entryVip">会员</view>
         <view class='' @tap.stop="_entryGuide">小区指南</view>
-        <view class='' @tap.stop="_entryBorrow">物品共享</view>
-        <view class='' wx:if="{{syncTemp}}" @tap.stop="_findCoupon">优惠券</view>
-        <view class='freshEverday' wx:if="{{syncTemp}}" @tap.stop="_entryFreshEverday">每日优选</view>
+        <view class='' @tap.stop="_entryBorrow">借东西</view>
+        <view class='findCoupon' @tap.stop="_findCoupon">优惠券</view>
       </scroll-view>
     </view>
-    <form @submit="formSubmit" report-submit>
+    <form bindsubmit="formSubmit" report-submit>
       <view class="search">
-        <input placeholder="我想要……" @input="valueInput" value="{{inputmsg}}" />
-        <button type="default" class="btn-area" @tap.stop="bindButtonTap">发送</button>
+        <input placeholder="我想要……" bindinput='valueInput' value='{{valInput}}' />
+        <button form-type="submit" type="default" class="btn-area" catchtap="bindButtonTap">发送</button>
       </view>
     </form>
   </view>
@@ -23,246 +22,48 @@
 <script>
   import wepy from 'wepy'
   export default class bottomPack extends wepy.component {
-    data = {
-      // 输入框的值
-      inputmsg: '',
-      // 选项的显示隐藏
-      // temp: false,
-    };
-    async onLoad() {
-    };
+    async onLoad(){
+      this.$emit('some-event', 1, 2, 3, 4);
+    }
     methods = {
-      // 进入小区指南
-      _entryGuide() {
-        if (this.$parent.globalData.userInfo) {
-          wx.navigateTo({
-            url: '../guide/guide?pid=' + this.$parent.globalData.userInfo.pid + "&shop_name=" + this.$parent.globalData
-              .userInfo.shop_name
-          })
-        }
-      },
-      // 点击找优惠券按钮
-      _findCoupon() {
-        this.popup(0, {
-          content: ["帮我找隐藏优惠券"],
-          type: "user",
-          ctime: new Date().getTime(),
-          class: "userWord",
-        });
-        setTimeout((res) => {
-          let Getyq = Api.flzsYzrom + '/index.php/api/Getyq';
-          app.request("GET", Getyq, "", (res) => {
-            var data = res.data.data.data;
-            this.renderCoupon(data);
-          });
-        }, 1800)
-      },
-      // 进入物品借租页面
-      _entryBorrow(e) {
-        if (this.$parent.globalData.userInfo) {
-          wx.navigateTo({
-            url: "../borrow/borrow"
-          })
-        }
-      },
-      // 进入我的中心
-      _entryMine() {
-        if (this.$parent.globalData.userInfo) {
-          wx.navigateTo({
-            url: '../mine/mine'
-          })
-        }
-      },
-      // 进入会员
       _entryVip() {
-        if (this.$parent.globalData.userInfo) {
-          wx.navigateTo({
-            url: '../vip/vip?pid=' + this.$parent.globalData.userInfo.pid + "&shop_name=" + this.$parent.globalData
-              .userInfo.shop_name
-          })
-        }
+        console.log("Vip")
       },
-      // 进入小区新鲜事
-      entryFreshNews(e) {
-        // console.log(e.currentTarget.dataset.item.id);
+      _entryGuide() {
+        // console.log(this.$parent.$parent.globalData)
         wx.navigateTo({
-          url: '../guide/subpage/freshNews/freshNews?pid=' + this.$parent.globalData.userInfo.pid +
-            "&notice_id=" + e.currentTarget
-            .dataset.item.id,
+          // url: '../guide/guide?pid=' + globalData.userInfo.pid + "&shop_name=" + globalData.userInfo.shop_name
+          url: '../guide/guide'
         })
       },
-      // 进入借租物品详情
-      _entryDetail(e) {
-        console.log(e);
-        if (e.currentTarget.dataset.id) {
-          // console.log(e.target.dataset.id);      
-          wx.navigateTo({
-            url: "../borrow/subpage/borrow_detail/borrow_detail?id=" + e.currentTarget.dataset.id
-          })
-        } else {
-          // app._showtoast("点太快了~")
-        }
+      _entryBorrow() {
+        wx.navigateTo({
+          url: '../borrow/borrow'
+        })
+      },
+      _findCoupon() {
+        console.log(this);
+      },
+      valueInput() {
 
       },
-      // 进入每日优鲜页面
-      _entryFreshEverday() {
-        wx.navigateTo({
-          url: "../h5/h5?agreementurl=" + Api.setConfig.url + "/h5/bns/index.html"
-        })
-      },
-      // 进入小区黄页
-      entryYellowPage(e) {
-        // console.log(e.target.dataset.id)
-        wx.navigateTo({
-          url: "../guide/subpage/yellowPage/yellowPage?data=" + JSON.stringify(e.target.dataset)
-        })
-      },
-      // 获取input值
-      valueInput(e) {
-        this.inputmsg = e.detail.value;
-      },
-      // 发送
       bindButtonTap() {
-        var keyword = this.inputmsg
-        if (keyword == "") return;
-        this.popup(0, {
-          content: [keyword],
-          ctime: new Date().getTime(),
-          type: "user",
-          class: "userWord"
-        })
-        this.inputmsg = "";
-        var value = wx.getStorageSync(keyword)
-        // 缓存有商品数据
-        if (value) {
-          let coupon = value;
-          this.renderCoupon(coupon);
-        }
-        // 缓存没有商品数据
-        else {
-          (async () => {
-            let res = await Api.getUserSearch({
-              query: {
-                keyword: keyword,
-                pid: this.$parent.globalData.userInfo.pid,
-                uid: this.$parent.globalData.userInfo.id,
-              },
-              method: "POST"
-            })
-            let keywordtype = res.data.data.keywordtype
-            let responseWay = {
-              // 物业
-              1: (res) => {
-                this.popup(500, {
-                  content: res.data.data.data,
-                  type: "card",
-                  ctime: new Date().getTime(),
-                  class: "estate",
-                  keywordtype: 1
-                })
-              },
-              // 通知
-              2: (res) => {
-                this.popup(500, {
-                  content: res.data.data.data,
-                  type: "card",
-                  ctime: new Date().getTime(),
-                  class: "message",
-                  keywordtype: 2
-                })
-              },
-              // 商品
-              3: (res) => {
-                this.popup(500, {
-                  content: res.data.data.data,
-                  type: "card",
-                  ctime: new Date().getTime(),
-                  class: "goods",
-                  keywordtype: keywordtype
-                })
-              },
-              // 优惠券
-              4: (res) => {
-                // console.log(res.data.data.data)
-                let coupons = res.data.data.data;
 
-                try {
-                  wx.setStorageSync(keyword, coupons);
-                } catch (e) {};
-                wx.getStorage({
-                  key: keyword,
-                  success: (res) => {
-                    console.log(res.data)
-                    let coupon = res.data;
-                    this.renderCoupon(coupon)
-                  }
-                })
-              },
-              // 淘口令
-              5: (res) => {
-                // console.log(res.data.data.data.data);
-                if (res.data.data.data.data) {
-                  let coupon = res.data.data.data.data.data;
-                  this.renderCoupon(coupon)
-                } else {
-                  this.popup(500, {
-                    content: ["没有优惠券"],
-                    type: "ai",
-                    ctime: new Date().getTime(),
-                    class: "aiWord",
-                    keywordtype: 5
-                  })
-                }
-              },
-              // 接机器人
-              6: (res) => {
-                this.popup(500, {
-                  content: [res.data.data.data.text],
-                  type: "ai",
-                  ctime: new Date().getTime(),
-                  class: "aiWord",
-                  keywordtype: 6
-                })
-              },
-              // 小区指南
-              7: (res) => {
-                this.popup(500, {
-                  content: res.data.data.data,
-                  type: "card",
-                  ctime: new Date().getTime(),
-                  class: "estate",
-                  keywordtype: 7
-                })
-              },
-            }
-            responseWay[keywordtype](res);
-          })();
-        }
-      },
-
-    };
-    events = {};
-    props = {
-      // 父向子单向动态传值
-      syncTemp: {
-        type: Boolean,
-        default: 'null',
-        twoWay: true,
-      },
-    };
-    
+      }
+    }
+    events = {
+      'some-event': (p1, p2, p3, $event) => {
+      }
+    }
   }
 
 </script>
 
 <style lang="less">
-  /* 底部部分 */
-
   .bottomPack {
     position: absolute;
     bottom: 0;
     left: 0;
-    z-index: 3;
     .Wallet {
       position: fixed;
       bottom: 210rpx;
@@ -303,11 +104,15 @@
           &:first-of-type {
             margin-left: 28rpx;
           }
+
+        }
+        .findCoupon {
+          color: #FFD203;
         }
       }
+
     }
-    >form {
-      /* 输入框 */
+    form {
       .search {
         position: relative;
         width: 100%;
@@ -316,7 +121,7 @@
         background-color: white;
         display: flex;
         flex-direction: row;
-        >input {
+        input {
           width: 564rpx;
           height: 72rpx;
           font-size: 32rpx;
