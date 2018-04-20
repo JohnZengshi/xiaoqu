@@ -78,6 +78,7 @@
         // 获取粘贴板并处理
         this.disposeClipboard();
       });
+
       console.log("...develop...")
     };
     // 每次页面进入
