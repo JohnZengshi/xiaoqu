@@ -29,8 +29,7 @@
       // 选项的显示隐藏
       // temp: false,
     };
-    async onLoad() {
-    };
+    async onLoad() {};
     methods = {
       // 进入小区指南
       _entryGuide() {
@@ -102,7 +101,6 @@
         } else {
           // app._showtoast("点太快了~")
         }
-
       },
       // 进入每日优鲜页面
       _entryFreshEverday() {
@@ -140,7 +138,7 @@
         }
         // 缓存没有商品数据
         else {
-          (async () => {
+          (async() => {
             let res = await Api.getUserSearch({
               query: {
                 keyword: keyword,
@@ -185,7 +183,6 @@
               4: (res) => {
                 // console.log(res.data.data.data)
                 let coupons = res.data.data.data;
-
                 try {
                   wx.setStorageSync(keyword, coupons);
                 } catch (e) {};
@@ -239,7 +236,6 @@
           })();
         }
       },
-
     };
     events = {};
     props = {
@@ -250,14 +246,11 @@
         twoWay: true,
       },
     };
-    
   }
-
 </script>
 
 <style lang="less">
   /* 底部部分 */
-
   .bottomPack {
     position: absolute;
     bottom: 0;
@@ -344,5 +337,4 @@
       }
     }
   }
-
 </style>
