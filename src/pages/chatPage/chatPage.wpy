@@ -594,7 +594,6 @@
     };
     // 页面初始化
     onLoad() {
-      console.log("test")
       // 登录
       (new(this.login())).wxLogin((res) => {
         // console.log(res)
