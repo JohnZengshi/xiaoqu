@@ -18,9 +18,9 @@
                 <view class='content'>
                   <text>{{item.title}}</text>
                   <text>
-                                      <text>券后价</text>
+                                          <text>券后价</text>
                   <text>
-                                        <text style='margin-right:0;'>￥</text>
+                                            <text style='margin-right:0;'>￥</text>
                   <text>{{item.newpirce}}</text>
                   </text>
                   </text>
@@ -28,7 +28,7 @@
               </view>
               <view class='right'>
                 <text>
-                                    <text style='font-size: 26rpx;'>￥</text>
+                                        <text style='font-size: 26rpx;'>￥</text>
                 <text style='font-size: 44rpx;font-weight: 800;line-height:44rpx'>{{item.ulanprice}}</text>
                 </text>
               </view>
@@ -51,7 +51,7 @@
                   <text>{{item.title}}</text>
                   <text>¥{{item.discountprice}}</text>
                   <text>
-                                      <text>券后价</text>
+                                          <text>券后价</text>
                   <text>¥{{item.newpirce}}</text>
                   </text>
                 </view>
@@ -77,7 +77,7 @@
                 <view class='content money_no_coupon'>
                   <text>{{item.title}}</text>
                   <text>
-                                      <text>原价:￥{{item.discountprice}}</text>
+                                          <text>原价:￥{{item.discountprice}}</text>
                   </text>
                 </view>
               </view>
@@ -195,194 +195,194 @@
   import wepy from 'wepy';
   import 'wepy-async-function';
   export default class sectionBox extends wepy.component {
-      data = {
-        // 聊天界面的对话
-        chatBox: [],
-        // 对话的定位
-        toView: "",
-        // 加载更多的动画
-        loader: "hide",
-      };
-      methods = {
-        // 点击优惠券进入详情
-        couponToDetail(e) {
-          console.log(e.currentTarget.dataset.item)
-          // 断网处理
-          if (this.isOnline == false) {
-            this.networkOutage();
-            return;
-          }
-          var nid = e.currentTarget.dataset.item.nid;
-          if (nid.substr(0, 4) != '1000') {
-            nid = '1000' + nid;
-          }
-          wx.navigateTo({
-            // url: '../h5/h5?taokouling='+ e.currentTarget.dataset.item.data.newcoupon +'&nid=1000' + e.currentTarget.dataset.item.data.nid ,
-            url: '../h5/h5?nid=' + nid + '&taokouling=' + e.currentTarget.dataset.item.newcoupon
-          })
-        },
-        // 进入定位地图
-        _entryLocation(e) {
-          // console.log(e.currentTarget.dataset.item)
-          wx.navigateTo({
-            url: '../guide/subpage/location/location?item=' + JSON.stringify(e.currentTarget.dataset.item)
-          })
-        },
-        // 拨打电话
-        calling(e) {
-          app.calling(e.currentTarget.dataset.phone)
-        },
-        //转发给朋友
-        onShareAppMessage(res) {
-          // console.log(this.$parent.globalData.userInfo.shop_name);
-          var title = "介绍一下，" + this.$parent.globalData.userInfo.shop_name + "的小区管家"
-          var path = "pages/chatPage/chatPage";
-          if (res.from === 'button') {
-            let item = res.target.dataset.item
-            // 来自页面内转发按钮
-            if (res.target.dataset.from == "notifyEveryone") {
-              path = "/pages/chatPage/chatPage";
-              title = title;
-            }
-            // 物业分享
-            else if (res.target.dataset.from == "wuye") {
-              path = "/pages/chatPage/chatPage";
-              title = title;
-            }
-            // 通知
-            else if (res.target.dataset.from == "tongzhi") {
-              path = "pages/guide/subpage/freshNews/freshNews?pid=" + this.$parent.globalData.userInfo.pid +
-                "&notice_id=" + item.id +
-                "&share=1";
-              title = item.description;
-            }
-            // 商品
-            else if (res.target.dataset.from == "shangping") {
-              path = "pages/borrow/subpage/borrow_detail/borrow_detail?id=" + item.id + "&share=1";
-              title = '想要【' + item.title + '】？不用买，免费用！';
-            }
-            // 指南
-            else if (res.target.dataset.from == "zhinan") {
-              item.from = "data_list";
-              item.share = "1";
-              path = "pages/guide/subpage/yellowPage/yellowPage?data=" + JSON.stringify(item);
-              title = item.company;
-            }
-            // 优惠券
-            else if (res.target.dataset.from == "coupon") {
-              path = "pages/h5/h5?nid=1000" + item.nid + '&taokouling=' + item.newcoupon;
-              title = "这张优惠券不错！";
-            }
-          }
-          return {
-            title: title,
-            path: path,
-            imageUrl: '/pages/chatPage/images/share.jpg',
-            success: function(res) {
-              // 转发成功
-            },
-            fail: function(res) {
-              // 转发失败
-            }
-          }
-        },
-        // 上拉加载更多
-        loadMore() {
-          let ChatRecord = this.ChatRecord
-          this.loader = "show";
-          this.toView = "";
-          ChatRecord.loadMore((res) => {
-            if (res) {
-              this.chatBox = ChatRecord.userChatRecord.concat(this.chatBox);
-              setTimeout(() => {
-                this.loader = "hide";
-              }, 2000)
-            } else {
-              app._showtoast("没有更多聊天记录了！", "none");
-              setTimeout(() => {
-                this.loader = "hide";
-                this.popup();
-              }, 2000)
-            }
-          });
-        },
-      };
-      props = {
-        syncChatBox: {
-          type: Array,
-          default: 'null',
-          twoWay: true,
+    data = {
+      // 聊天界面的对话
+      chatBox: [],
+      // 对话的定位
+      toView: "",
+      // 加载更多的动画
+      loader: "hide",
+    };
+    methods = {
+      // 点击优惠券进入详情
+      couponToDetail(e) {
+        console.log(e.currentTarget.dataset.item)
+        // 断网处理
+        if (this.isOnline == false) {
+          this.networkOutage();
+          return;
         }
-      };
-      watch = {
-        syncChatBox(newValue, oldValue) {
-          console.log(newValue)
-          var res = newValue;
-          // 老用户
+        var nid = e.currentTarget.dataset.item.nid;
+        if (nid.substr(0, 4) != '1000') {
+          nid = '1000' + nid;
+        }
+        wx.navigateTo({
+          // url: '../h5/h5?taokouling='+ e.currentTarget.dataset.item.data.newcoupon +'&nid=1000' + e.currentTarget.dataset.item.data.nid ,
+          url: '../h5/h5?nid=' + nid + '&taokouling=' + e.currentTarget.dataset.item.newcoupon
+        })
+      },
+      // 进入定位地图
+      _entryLocation(e) {
+        // console.log(e.currentTarget.dataset.item)
+        wx.navigateTo({
+          url: '../guide/subpage/location/location?item=' + JSON.stringify(e.currentTarget.dataset.item)
+        })
+      },
+      // 拨打电话
+      calling(e) {
+        app.calling(e.currentTarget.dataset.phone)
+      },
+      //转发给朋友
+      onShareAppMessage(res) {
+        // console.log(this.$parent.globalData.userInfo.shop_name);
+        var title = "介绍一下，" + this.$parent.globalData.userInfo.shop_name + "的小区管家"
+        var path = "pages/chatPage/chatPage";
+        if (res.from === 'button') {
+          let item = res.target.dataset.item
+          // 来自页面内转发按钮
+          if (res.target.dataset.from == "notifyEveryone") {
+            path = "/pages/chatPage/chatPage";
+            title = title;
+          }
+          // 物业分享
+          else if (res.target.dataset.from == "wuye") {
+            path = "/pages/chatPage/chatPage";
+            title = title;
+          }
+          // 通知
+          else if (res.target.dataset.from == "tongzhi") {
+            path = "pages/guide/subpage/freshNews/freshNews?pid=" + this.$parent.globalData.userInfo.pid +
+              "&notice_id=" + item.id +
+              "&share=1";
+            title = item.description;
+          }
+          // 商品
+          else if (res.target.dataset.from == "shangping") {
+            path = "pages/borrow/subpage/borrow_detail/borrow_detail?id=" + item.id + "&share=1";
+            title = '想要【' + item.title + '】？不用买，免费用！';
+          }
+          // 指南
+          else if (res.target.dataset.from == "zhinan") {
+            item.from = "data_list";
+            item.share = "1";
+            path = "pages/guide/subpage/yellowPage/yellowPage?data=" + JSON.stringify(item);
+            title = item.company;
+          }
+          // 优惠券
+          else if (res.target.dataset.from == "coupon") {
+            path = "pages/h5/h5?nid=1000" + item.nid + '&taokouling=' + item.newcoupon;
+            title = "这张优惠券不错！";
+          }
+        }
+        return {
+          title: title,
+          path: path,
+          imageUrl: '/pages/chatPage/images/share.jpg',
+          success: function(res) {
+            // 转发成功
+          },
+          fail: function(res) {
+            // 转发失败
+          }
+        }
+      },
+      // 上拉加载更多
+      loadMore() {
+        let ChatRecord = this.ChatRecord
+        this.loader = "show";
+        this.toView = "";
+        ChatRecord.loadMore((res) => {
           if (res) {
-            this.chatBox = res.concat(this.chatBox)
-            this.popup(500, null);
-            this.popup(0, {
-              content: [],
-              type: 'new_msg',
-              ctime: new Date().getTime(),
-              class: "new_msgclass",
-            });
-            // 发问候语
-            this.$parent.greetingsWord.radomWord((res) => {
-              // console.log(res)
-              this.popup(500, {
-                content: [res],
-                type: 'ai',
-                ctime: new Date().getTime(),
-                class: "aiWord",
-              });
-              this.popup(1000, {
-                content: ["有什么需要的，小松果一直都在。"],
-                type: 'ai',
-                ctime: new Date().getTime(),
-                class: "aiWord",
-              });
-              this.$parent.isGreet = false;
-            });
+            this.chatBox = ChatRecord.userChatRecord.concat(this.chatBox);
+            setTimeout(() => {
+              this.loader = "hide";
+            }, 2000)
+          } else {
+            app._showtoast("没有更多聊天记录了！", "none");
+            setTimeout(() => {
+              this.loader = "hide";
+              this.popup();
+            }, 2000)
           }
-          // 新用户
-          else {
-            this.popup(500, {
-              content: ["Hi，" + userInfo.nickname + "，初次见面。"],
-              ctime: new Date().getTime(),
-              type: "ai",
-              class: "aiWord"
-            })
-            this.popup(1000, {
-              content: ["我是小松果，您的专属小区管家。", "关于" + userInfo.shop_name +
-                "的一切，我都知道哦~",
-                "点击下面的按钮，解锁更多功能。"
-              ],
-              ctime: new Date().getTime(),
-              type: "ai",
-              class: "aiWord"
-            })
-          }
-          console.log(`syncChatBox value: ${oldValue} -> ${newValue}`)
-        }
-      };
-      onLoad() {
-        // 弹出效果
-        popup(time, obj) {
-          // 对话的滚动
-          let textScroll = () => {
-            this.toView = "to" + this.chatBox.length;
-          };
-          setTimeout(() => {
-            if (obj) {
-              this.chatBox.push(obj);
-              this.$apply();
-            }
-            textScroll();
-          }, time);
-        };
+        });
+      },
+    };
+    props = {
+      syncChatBox: {
+        type: Array,
+        default: 'null',
+        twoWay: true,
       }
+    };
+    watch = {
+      syncChatBox(newValue, oldValue) {
+        console.log(newValue)
+        var res = newValue;
+        // 老用户
+        if (res) {
+          this.chatBox = res.concat(this.chatBox)
+          this.popup(500, null);
+          this.popup(0, {
+            content: [],
+            type: 'new_msg',
+            ctime: new Date().getTime(),
+            class: "new_msgclass",
+          });
+          // 发问候语
+          this.$parent.greetingsWord.radomWord((res) => {
+            // console.log(res)
+            this.popup(500, {
+              content: [res],
+              type: 'ai',
+              ctime: new Date().getTime(),
+              class: "aiWord",
+            });
+            this.popup(1000, {
+              content: ["有什么需要的，小松果一直都在。"],
+              type: 'ai',
+              ctime: new Date().getTime(),
+              class: "aiWord",
+            });
+            this.$parent.isGreet = false;
+          });
+        }
+        // 新用户
+        else {
+          this.popup(500, {
+            content: ["Hi，" + userInfo.nickname + "，初次见面。"],
+            ctime: new Date().getTime(),
+            type: "ai",
+            class: "aiWord"
+          })
+          this.popup(1000, {
+            content: ["我是小松果，您的专属小区管家。", "关于" + userInfo.shop_name +
+              "的一切，我都知道哦~",
+              "点击下面的按钮，解锁更多功能。"
+            ],
+            ctime: new Date().getTime(),
+            type: "ai",
+            class: "aiWord"
+          })
+        }
+        console.log(`syncChatBox value: ${oldValue} -> ${newValue}`)
+      }
+    };
+    onLoad() {};
+    // 弹出效果
+    popup(time, obj) {
+      // 对话的滚动
+      let textScroll = () => {
+        this.toView = "to" + this.chatBox.length;
+      };
+      setTimeout(() => {
+        if (obj) {
+          this.chatBox.push(obj);
+          this.$apply();
+        }
+        textScroll();
+      }, time);
+    };
+  }
 </script>
 <style lang="less">
   .loader {
