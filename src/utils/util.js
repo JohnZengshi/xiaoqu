@@ -155,6 +155,7 @@ function timeImg() {
     }
     // 开始计时
     setTime(callback = function () {}) {
+      console.log("开始计时")
       this.interval = setInterval(() => {
         this.time++;
         //  console.log(this.time);
@@ -167,6 +168,7 @@ function timeImg() {
     }
     // 清除计时
     clearTime() {
+      console.log("结束计时")
       clearInterval(this.interval);
       this.time = 0;
     }
