@@ -333,6 +333,7 @@
       },
       // 获取input值
       valueInput(e) {
+
         this.inputmsg = e.detail.value;
       },
       // 发送
@@ -880,8 +881,8 @@
       };
       setTimeout(() => {
         if (obj) {
-          this.data.chatBox.push(obj);
-          this.setData(this.data);
+          this.chatBox.push(obj);
+          this.$apply();
         }
         if (time) {
           textScroll();
