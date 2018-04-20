@@ -35,7 +35,9 @@ const getWelmsg = (params) => wxRequest(params, rootFans + '/api/welmsg?sex=');
 // 获取教程文案
 const getTutorials = (params) => wxRequest(params, community + '/index.php?m=Api&c=search&a=tutorials');
 // 粘贴板内容请求
-const getClipboardData = (params) => wxRequest(params,community + '/index.php?m=Api&c=search&a=index');
+const getClipboardData = (params) => wxRequest(params, community + '/index.php?m=Api&c=search&a=index');
+// 用户发送文案请求内容
+const getUserSearch = (params) => wxRequest(params, community + '//index.php?m=Api&c=search&a=index');
 module.exports = {
   token,
   login,
@@ -46,5 +48,6 @@ module.exports = {
   downloadUserChat,
   getWelmsg,
   getTutorials,
-  getClipboardData
+  getClipboardData,
+  getUserSearch
 }
