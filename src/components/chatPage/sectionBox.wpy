@@ -18,18 +18,18 @@
                 <view class='content'>
                   <text>{{item.title}}</text>
                   <text>
-                                          <text>券后价</text>
-                  <text>
-                                            <text style='margin-right:0;'>￥</text>
-                  <text>{{item.newpirce}}</text>
-                  </text>
+                    <text>券后价</text>
+                    <text>
+                      <text style='margin-right:0;'>￥</text>
+                      <text>{{item.newpirce}}</text>
+                    </text>
                   </text>
                 </view>
               </view>
               <view class='right'>
                 <text>
-                                        <text style='font-size: 26rpx;'>￥</text>
-                <text style='font-size: 44rpx;font-weight: 800;line-height:44rpx'>{{item.ulanprice}}</text>
+                  <text style='font-size: 26rpx;'>￥</text>
+                  <text style='font-size: 44rpx;font-weight: 800;line-height:44rpx'>{{item.ulanprice}}</text>
                 </text>
               </view>
               <view class='bottom botn_money_coupon'>
@@ -51,8 +51,8 @@
                   <text>{{item.title}}</text>
                   <text>¥{{item.discountprice}}</text>
                   <text>
-                                          <text>券后价</text>
-                  <text>¥{{item.newpirce}}</text>
+                    <text>券后价</text>
+                    <text>¥{{item.newpirce}}</text>
                   </text>
                 </view>
               </view>
@@ -77,7 +77,7 @@
                 <view class='content money_no_coupon'>
                   <text>{{item.title}}</text>
                   <text>
-                                          <text>原价:￥{{item.discountprice}}</text>
+                    <text>原价:￥{{item.discountprice}}</text>
                   </text>
                 </view>
               </view>
@@ -164,7 +164,8 @@
           <!--  -->
           <!-- 小区指南 -->
           <view wx:elif="{{item.keywordtype == 7}}">
-            <view class='estate_title flex flex-v flex-align-center' data-name="{{item.content.company}}" data-icon="{{item.content.logo}}" data-from="data_list" data-id="{{item.content.id}}" catchtap="entryYellowPage">
+            <view class='estate_title flex flex-v flex-align-center' data-name="{{item.content.company}}" data-icon="{{item.content.logo}}"
+              data-from="data_list" data-id="{{item.content.id}}" catchtap="entryYellowPage">
               <image src='{{item.content.logo}}'></image>
               <view class='estate_name'>
                 <text>{{item.content.company}}</text>
@@ -278,10 +279,10 @@
           title: title,
           path: path,
           imageUrl: '/pages/chatPage/images/share.jpg',
-          success: function(res) {
+          success: function (res) {
             // 转发成功
           },
-          fail: function(res) {
+          fail: function (res) {
             // 转发失败
           }
         }
@@ -383,6 +384,7 @@
       }, time);
     };
   }
+
 </script>
 <style lang="less">
   .loader {
@@ -464,7 +466,9 @@
       display: inline-block;
     }
   }
+
   /* 聊天框部分 */
+
   .sectionBox {
     height: 100%;
     width: 100%;
@@ -899,4 +903,5 @@
       }
     }
   }
+
 </style>

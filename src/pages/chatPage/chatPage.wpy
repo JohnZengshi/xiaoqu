@@ -125,7 +125,7 @@
           this.callback = null;
         };
         // 弹出确认框
-        showModal(callback = function() {}) {
+        showModal(callback = function () {}) {
           wx.showModal({
             title: '警告',
             content: '您点击了拒绝授权,将无法正常显示个人信息,点击确定重新获取授权。',
@@ -156,9 +156,9 @@
           })
         }
         // 获取用户信息
-        getUserInfo(code, callback = function() {}) {
+        getUserInfo(code, callback = function () {}) {
           wx.getUserInfo({
-            success: async(data) => {
+            success: async (data) => {
               var data = {
                 code: code,
                 userInfo: JSON.stringify(data.userInfo),
@@ -182,7 +182,7 @@
           })
         }
         // 获取登录code
-        wxLogin(callback = function() {}) {
+        wxLogin(callback = function () {}) {
           wx.login({
             success: (res) => {
               if (res.code) {
@@ -235,7 +235,7 @@
           }
         }
         // 获取聊天记录
-        async _ObtainChatRecord(callback = function() {}) {
+        async _ObtainChatRecord(callback = function () {}) {
           let res = await Api.downloadUserChat({
             query: this.param,
             method: "POST",
@@ -252,7 +252,7 @@
           }
         }
         // 加载更多聊天记录
-        loadMore(callback = function() {}) {
+        loadMore(callback = function () {}) {
           console.log("加载更多聊天记录。。。");
           // console.log(this.allChat);
           if (this.allChat.length == this.time) this.flag = false;
@@ -275,7 +275,7 @@
           this.flag = true;
           this.getTutorialsTime = 1;
         };
-        async getWelmsg(callback = function() {}) {
+        async getWelmsg(callback = function () {}) {
           let res = await Api.getWelmsg({
             query: "",
             method: "GET"
@@ -285,7 +285,7 @@
           this.word = msg;
           callback(this.word);
         };
-        async getTutorials(callback = function() {}) {
+        async getTutorials(callback = function () {}) {
           let data = {
             id: this.getTutorialsTime,
           }
@@ -298,7 +298,7 @@
           if (this.getTutorialsTime == 5) return this.getTutorialsTime = 1
           this.getTutorialsTime++;
         };
-        radomWord(callback = function() {}) {
+        radomWord(callback = function () {}) {
           if (this.flag) {
             this.getWelmsg(callback);
             this.flag = false
@@ -318,7 +318,7 @@
           this.userInfo = userInfo;
         };
         // 获取粘贴板内容
-        getClipboard(callback = function() {}) {
+        getClipboard(callback = function () {}) {
           wx.getClipboardData({
             success: (res) => {
               this.key = res.data;
@@ -329,7 +329,7 @@
           })
         };
         // 请求内容
-        async request(callback = function() {}) {
+        async request(callback = function () {}) {
           let data = {
             keyword: this.key,
             pid: this.userInfo.pid,
@@ -467,9 +467,11 @@
       }
     };
   };
+
 </script>
 <style lang="less">
   /* 首页进入部分 */
+
   .section {
     height: 100%;
     overflow: hidden;
@@ -478,4 +480,5 @@
     border-top: 1px solid #ddd;
     box-sizing: border-box; // 上拉加载的动画
   }
+
 </style>
