@@ -128,7 +128,7 @@
         // 获取粘贴板并处理
         this.disposeClipboard();
       });
-      console.log("...聊天框组件...")
+      console.log("...底部发送框部分...")
     };
     // 每次页面进入
     onShow() {
@@ -527,7 +527,6 @@
       }
     };
   };
-
 </script>
 <style lang="less">
   /* 首页进入部分 */
