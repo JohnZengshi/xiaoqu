@@ -48,7 +48,10 @@
       // 用户信息
       user: null,
     };
-    methods = {};
+    methods = {
+
+
+    };
     watch = {
       temp(newValue, oldValue) {
         console.log(`num value: ${oldValue} -> ${newValue}`)
@@ -309,8 +312,8 @@
           if (this.flag) {
             this.userChatRecord = JSON.parse(this.allChat[this.time].usersay);
             this.time++;
-            console.log(this.userChatRecord);
-            callback(true);
+            // console.log(this.userChatRecord);
+            callback(this.userChatRecord);
           } else {
             callback(false);
           }
@@ -537,7 +540,7 @@
     overflow: hidden;
     padding: 0 28rpx;
     background-color: #f5f5f6;
-    border-top: 1px solid #ddd;
+    // border-top: 1px solid #ddd;
     box-sizing: border-box;
   }
 
