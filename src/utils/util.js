@@ -160,6 +160,7 @@ function timeImg() {
         this.time++;
         //  console.log(this.time);
         if (this.time == this.limit) {
+          console.log("结束计时")
           clearInterval(this.interval);
           this.time = 0;
           callback();

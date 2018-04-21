@@ -1,6 +1,6 @@
 <template>
   <view class="section">
-    <SectionBox :syncChatBox.sync="chatBox"></SectionBox>
+    <SectionBox :syncChatBox.sync="chatBox" :syncToView.sync="toView"></SectionBox>
     <BottomPack :syncTemp.sync="temp" :syncUser.sync="user"></BottomPack>
   </view>
 </template>
@@ -43,7 +43,10 @@
       temp: false,
       // 聊天内容（传给子组件）
       chatBox: [],
-      user:null,
+      // 聊天气泡的定位
+      toView:"",
+      // 用户信息
+      user: null,
     };
     methods = {};
     watch = {
@@ -67,21 +70,65 @@
         // 聊天记录
         this.ChatRecord = new(this.ChatRecordSystem())(userInfo);
         // 设置计时器
-        this.greetings = new(timeImg())(120, 1000);
+        this.greetings = new(timeImg())(10, 1000);
         // 设置问候语规则
         this.greetingsWord = new(this.gettingWord())();
         // 设置粘贴板
         this.clipboard = new(this.getClipboard())(userInfo);
         // 获取聊天记录
         this.ChatRecord._ObtainChatRecord((res) => {
-          // console.log(res);
-          this.chatBox = res;
-          this.$apply();
+          console.log(res);
+          // 老用户
+          if (res) {
+            this.chatBox = res.concat(this.chatBox)
+            this.popup(500, null);
+            this.popup(0, {
+              content: [],
+              type: 'new_msg',
+              ctime: new Date().getTime(),
+              class: "new_msgclass",
+            });
+            // 发问候语
+            this.greetingsWord.radomWord((res) => {
+              // console.log(res)
+              this.popup(500, {
+                content: [res],
+                type: 'ai',
+                ctime: new Date().getTime(),
+                class: "aiWord",
+              });
+              this.popup(1000, {
+                content: ["有什么需要的，小松果一直都在。"],
+                type: 'ai',
+                ctime: new Date().getTime(),
+                class: "aiWord",
+              });
+              this.isGreet = false;
+            });
+          }
+          // 新用户
+          else {
+            this.popup(500, {
+              content: ["Hi，" + userInfo.nickname + "，初次见面。"],
+              ctime: new Date().getTime(),
+              type: "ai",
+              class: "aiWord"
+            })
+            this.popup(1000, {
+              content: ["我是小松果，您的专属小区管家。", "关于" + userInfo.shop_name +
+                "的一切，我都知道哦~",
+                "点击下面的按钮，解锁更多功能。"
+              ],
+              ctime: new Date().getTime(),
+              type: "ai",
+              class: "aiWord"
+            })
+          }
         });
         // 获取粘贴板并处理
         this.disposeClipboard();
       });
-      console.log("...底部发送框和其他按钮组件...")
+      console.log("...聊天框组件...")
     };
     // 每次页面进入
     onShow() {
@@ -140,7 +187,7 @@
                     // 用户已经授权
                     if (res.authSetting["scope.userInfo"]) {
                       this.wxLogin((res) => {
-                        console.log(this.callback)
+                        // console.log(this.callback)
                         this.callback(res)
                       })
                     }
@@ -233,7 +280,7 @@
               method: "POST"
             });
             console.log("上传新的聊天记录");
-            console.log(res);
+            // console.log(res);
             this.chattingBranches = usersayLen;
           }
         }
@@ -243,7 +290,7 @@
             query: this.param,
             method: "POST",
           });
-          console.log(res);
+          // console.log(res);
           this.allChat = res.data.data;
           if (res.data.error == "ok") {
             this.userChatRecord = JSON.parse(res.data.data[0].usersay);
@@ -387,7 +434,98 @@
         return;
       }
     };
-    
+    // 对话插入
+    popup(time, obj) {
+      setTimeout(() => {
+        if (obj) {
+          this.chatBox.push(obj);
+          this.toView = "to" + this.chatBox.length;
+          this.$apply();
+        }
+      }, time);
+    };
+    // 渲染优惠券
+    renderCoupon(data) {
+      if (data.length > 0) {
+        var n = parseInt(Math.random() * 10); //随机数 
+        data = data[n]; //循环
+      }
+      // 当前价
+      const currentPirce = data.discountprice - data.ulanprice;
+      // 优惠券面额
+      const ulanprice = data.ulanprice
+      // 返利金额
+      const commission = data.commission;
+      // 优惠券状态
+      const couponStatus = data.couponStatus;
+      // 商品查询历史价格的nid
+      const nid = data.nid;
+      // 原价
+      const oldprice = data.oldprice
+      // 历史价格
+      var pirce = [];
+      data.pic = data.pic.replace('75x75', '150x150');
+      var pic = data.pic;
+      if (pic.substring(0, 2) == '//') {
+        data.pic = 'https:' + data.pic;
+      }
+      // 原价
+      data.oldprice = toDecimal2(oldprice);
+      // 优惠金额
+      data.ulanprice != "" ? data.ulanprice = parseInt(ulanprice) || data.couponcount : ulanprice;
+      // 券后价
+      data.newpirce = toDecimal2(oldprice - ulanprice) || data.price;
+      if (data.discountprice == undefined) {
+        data.discountprice = data.oldprice;
+      }
+      if (data.newpirce == undefined) {
+        data.newpirce = toDecimal2(data.discountprice - data.ulanprice);
+      }
+      // 有券有返利 
+      if (data.ulanprice != '' && data.commission > 0) {
+        data.couponStatus = "botn_money_coupon"
+      }
+      // 有券没返利
+      else if (data.ulanprice != '' && data.commission == 0) {
+        data.couponStatus = "coupon_no_money"
+      }
+      // 没券有返利
+      else if (data.ulanprice == "" && data.commission > 0) {
+        data.couponStatus = "money_no_coupon"
+      }
+      // 标签 
+      data.type = "coupon";
+      // 样式
+      data.class = "couponCard";
+      data.couponStatus = "coupon_no_money"
+      //优惠券没数据
+      if (data.length == 0) {
+        this.popup(0, {
+          content: [this.strs[3]],
+          type: "ai",
+          ctime: new Date().getTime(),
+          class: "aiWord"
+        });
+        return;
+      }
+      // 优惠券有数据
+      else {
+        this.popup(500, {
+          content: ["主人，打开淘宝、天猫客户端，找到喜欢的商品，复制商品链接（淘口令）。回到微信打开松鼠邻家小程序，小松果自动帮您找优惠哦~"],
+          type: "ai",
+          ctime: new Date().getTime(),
+          class: "aiWord"
+        });
+        this.popup(1000, {
+          content: ["主人，先看看这张优惠券，还不错哦~"],
+          type: "ai",
+          ctime: new Date().getTime(),
+          class: "aiWord"
+        });
+        data.ctime = new Date().getTime()
+        this.popup(1500, data);
+      }
+    };
   };
 
 </script>

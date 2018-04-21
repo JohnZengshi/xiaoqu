@@ -41,7 +41,7 @@
       },
       // 点击找优惠券按钮
       _findCoupon() {
-        this.$parent.$com.SectionBox.popup(0, {
+        this.$parent.popup(0, {
           content: ["帮我找隐藏优惠券"],
           type: "user",
           ctime: new Date().getTime(),
@@ -53,7 +53,7 @@
             method:"GET"
           });
           let data = res.data.data.data;
-          this.$parent.$com.SectionBox.renderCoupon(data);
+          this.$parent.renderCoupon(data);
         })()
       },
       // 进入物品借租页面
@@ -122,8 +122,8 @@
       bindButtonTap() {
         var keyword = this.inputmsg
         if (keyword == "") return;
-        // console.log(this.$parent.$com.SectionBox.popup);
-        this.$parent.$com.SectionBox.popup(0, {
+        // console.log(this.$parent.popup);
+        this.$parent.popup(0, {
           content: [keyword],
           ctime: new Date().getTime(),
           type: "user",
@@ -134,7 +134,7 @@
         // 缓存有商品数据
         if (value) {
           let coupon = value;
-          this.renderCoupon(coupon);
+          this.$parent.renderCoupon(coupon);
         }
         // 缓存没有商品数据
         else {
@@ -151,7 +151,7 @@
             let responseWay = {
               // 物业
               1: (res) => {
-                this.$parent.$com.SectionBox.popup(500, {
+                this.$parent.popup(500, {
                   content: res.data.data.data,
                   type: "card",
                   ctime: new Date().getTime(),
@@ -161,7 +161,7 @@
               },
               // 通知
               2: (res) => {
-                this.$parent.$com.SectionBox.popup(500, {
+                this.$parent.popup(500, {
                   content: res.data.data.data,
                   type: "card",
                   ctime: new Date().getTime(),
@@ -171,7 +171,7 @@
               },
               // 商品
               3: (res) => {
-                this.$parent.$com.SectionBox.popup(500, {
+                this.$parent.popup(500, {
                   content: res.data.data.data,
                   type: "card",
                   ctime: new Date().getTime(),
@@ -202,7 +202,7 @@
                   let coupon = res.data.data.data.data.data;
                   this.renderCoupon(coupon)
                 } else {
-                  this.$parent.$com.SectionBox.popup(500, {
+                  this.$parent.popup(500, {
                     content: ["没有优惠券"],
                     type: "ai",
                     ctime: new Date().getTime(),
@@ -213,7 +213,7 @@
               },
               // 接机器人
               6: (res) => {
-                this.$parent.$com.SectionBox.popup(500, {
+                this.$parent.popup(500, {
                   content: [res.data.data.data.text],
                   type: "ai",
                   ctime: new Date().getTime(),
@@ -223,7 +223,7 @@
               },
               // 小区指南
               7: (res) => {
-                this.$parent.$com.SectionBox.popup(500, {
+                this.$parent.popup(500, {
                   content: res.data.data.data,
                   type: "card",
                   ctime: new Date().getTime(),
