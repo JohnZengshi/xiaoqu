@@ -42,12 +42,12 @@
       // 选项的显示隐藏
       temp: false,
       // 聊天内容（传给子组件）
-      chatBox:[],
+      chatBox: [],
     };
     methods = {};
     watch = {
-      temp (newValue, oldValue) {
-          console.log(`num value: ${oldValue} -> ${newValue}`)
+      temp(newValue, oldValue) {
+        console.log(`num value: ${oldValue} -> ${newValue}`)
       }
     };
     // 页面初始化
@@ -78,7 +78,11 @@
         // 获取粘贴板并处理
         this.disposeClipboard();
       });
+<<<<<<< HEAD
       console.log("...底部发送框和其他按钮组件...")
+=======
+      console.log("...聊天框组件...")
+>>>>>>> feature/聊天框组件
     };
     // 每次页面进入
     onShow() {
@@ -125,7 +129,7 @@
           this.callback = null;
         };
         // 弹出确认框
-        showModal(callback = function () {}) {
+        showModal(callback = function() {}) {
           wx.showModal({
             title: '警告',
             content: '您点击了拒绝授权,将无法正常显示个人信息,点击确定重新获取授权。',
@@ -156,9 +160,9 @@
           })
         }
         // 获取用户信息
-        getUserInfo(code, callback = function () {}) {
+        getUserInfo(code, callback = function() {}) {
           wx.getUserInfo({
-            success: async (data) => {
+            success: async(data) => {
               var data = {
                 code: code,
                 userInfo: JSON.stringify(data.userInfo),
@@ -182,7 +186,7 @@
           })
         }
         // 获取登录code
-        wxLogin(callback = function () {}) {
+        wxLogin(callback = function() {}) {
           wx.login({
             success: (res) => {
               if (res.code) {
@@ -233,10 +237,9 @@
             console.log(res);
             this.chattingBranches = usersayLen;
           }
-
         }
         // 获取聊天记录
-        async _ObtainChatRecord(callback = function () {}) {
+        async _ObtainChatRecord(callback = function() {}) {
           let res = await Api.downloadUserChat({
             query: this.param,
             method: "POST",
@@ -253,7 +256,7 @@
           }
         }
         // 加载更多聊天记录
-        loadMore(callback = function () {}) {
+        loadMore(callback = function() {}) {
           console.log("加载更多聊天记录。。。");
           // console.log(this.allChat);
           if (this.allChat.length == this.time) this.flag = false;
@@ -265,7 +268,6 @@
           } else {
             callback(false);
           }
-
         }
       }
     };
@@ -277,7 +279,7 @@
           this.flag = true;
           this.getTutorialsTime = 1;
         };
-        async getWelmsg(callback = function () {}) {
+        async getWelmsg(callback = function() {}) {
           let res = await Api.getWelmsg({
             query: "",
             method: "GET"
@@ -287,7 +289,7 @@
           this.word = msg;
           callback(this.word);
         };
-        async getTutorials(callback = function () {}) {
+        async getTutorials(callback = function() {}) {
           let data = {
             id: this.getTutorialsTime,
           }
@@ -300,7 +302,7 @@
           if (this.getTutorialsTime == 5) return this.getTutorialsTime = 1
           this.getTutorialsTime++;
         };
-        radomWord(callback = function () {}) {
+        radomWord(callback = function() {}) {
           if (this.flag) {
             this.getWelmsg(callback);
             this.flag = false
@@ -320,7 +322,7 @@
           this.userInfo = userInfo;
         };
         // 获取粘贴板内容
-        getClipboard(callback = function () {}) {
+        getClipboard(callback = function() {}) {
           wx.getClipboardData({
             success: (res) => {
               this.key = res.data;
@@ -331,7 +333,7 @@
           })
         };
         // 请求内容
-        async request(callback = function () {}) {
+        async request(callback = function() {}) {
           let data = {
             keyword: this.key,
             pid: this.userInfo.pid,
@@ -341,7 +343,6 @@
             query: data,
             method: "POST"
           })
-
           if (res.data.error == "ok") {
             this.responseData = res.data.data;
             await callback(this.responseData);
@@ -349,11 +350,7 @@
             wx.setClipboardData({
               data: ' '
             })
-          } else {
-
-          }
-
-
+          } else {}
         };
       };
     };
@@ -411,29 +408,23 @@
       const oldprice = data.oldprice
       // 历史价格
       var pirce = [];
-
       data.pic = data.pic.replace('75x75', '150x150');
-
       var pic = data.pic;
       if (pic.substring(0, 2) == '//') {
         data.pic = 'https:' + data.pic;
       }
       // 原价
       data.oldprice = toDecimal2(oldprice);
-
       // 优惠金额
       data.ulanprice != "" ? data.ulanprice = parseInt(ulanprice) || data.couponcount : ulanprice;
       // 券后价
-
       data.newpirce = toDecimal2(oldprice - ulanprice) || data.price;
       if (data.discountprice == undefined) {
         data.discountprice = data.oldprice;
       }
       if (data.newpirce == undefined) {
         data.newpirce = toDecimal2(data.discountprice - data.ulanprice);
-
       }
-
       // 有券有返利 
       if (data.ulanprice != '' && data.commission > 0) {
         data.couponStatus = "botn_money_coupon"
@@ -446,14 +437,11 @@
       else if (data.ulanprice == "" && data.commission > 0) {
         data.couponStatus = "money_no_coupon"
       }
-
       // 标签 
       data.type = "coupon";
       // 样式
       data.class = "couponCard";
-
       data.couponStatus = "coupon_no_money"
-
       //优惠券没数据
       if (data.length == 0) {
         this.popup(0, {
@@ -483,11 +471,9 @@
       }
     };
   };
-
 </script>
 <style lang="less">
   /* 首页进入部分 */
-
   .section {
     height: 100%;
     overflow: hidden;
@@ -496,5 +482,4 @@
     border-top: 1px solid #ddd;
     box-sizing: border-box; // 上拉加载的动画
   }
-
 </style>

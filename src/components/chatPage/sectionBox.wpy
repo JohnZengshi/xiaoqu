@@ -1,16 +1,12 @@
 <template>
   <scroll-view class='sectionBox' id='scrollBox' data-id='scrollBox' scroll-y="true" style="margin-bottom: 40px;" scroll-into-view="{{toView}}">
     <block wx:for="{{chatBox}}" wx:key="item">
-      <view id='to{{index+1}}' class="BOX {{item.class}}" animation="{{animationData}}">
-
+      <view id='to{{index+1}}' class="BOX {{item.class}} animated one bounceInUp">
         <view wx:if="{{item.type == 'new_msg'}}">下面是最新消息</view>
-
         <view wx:if="{{item.type == 'ai' || item.type == 'user'}}">
           <text wx:for="{{item.content}}" wx:for-item="items" wx:key="key">{{items}}</text>
         </view>
-
         <block wx:elif="{{item.type == 'coupon'}}">
-
           <!-- 有券有返利 -->
           <view class="botn_money_coupon" wx:if="{{item.couponStatus == 'botn_money_coupon'}}">
             <image class='background' src='./images/botn_money_coupon.png'></image>
@@ -22,18 +18,18 @@
                 <view class='content'>
                   <text>{{item.title}}</text>
                   <text>
-                    <text>券后价</text>
-                    <text>
-                      <text style='margin-right:0;'>￥</text>
-                      <text>{{item.newpirce}}</text>
-                    </text>
+                                          <text>券后价</text>
+                  <text>
+                                            <text style='margin-right:0;'>￥</text>
+                  <text>{{item.newpirce}}</text>
+                  </text>
                   </text>
                 </view>
               </view>
               <view class='right'>
                 <text>
-                  <text style='font-size: 26rpx;'>￥</text>
-                  <text style='font-size: 44rpx;font-weight: 800;line-height:44rpx'>{{item.ulanprice}}</text>
+                                        <text style='font-size: 26rpx;'>￥</text>
+                <text style='font-size: 44rpx;font-weight: 800;line-height:44rpx'>{{item.ulanprice}}</text>
                 </text>
               </view>
               <view class='bottom botn_money_coupon'>
@@ -43,7 +39,6 @@
               </view>
             </view>
           </view>
-
           <!-- 有券无返利 -->
           <view class="coupon_no_money" wx:if="{{item.couponStatus == 'coupon_no_money'}}">
             <view @tap.stop='couponToDetail' data-item="{{item}}" class='comment'>
@@ -56,8 +51,8 @@
                   <text>{{item.title}}</text>
                   <text>¥{{item.discountprice}}</text>
                   <text>
-                    <text>券后价</text>
-                    <text>¥{{item.newpirce}}</text>
+                                          <text>券后价</text>
+                  <text>¥{{item.newpirce}}</text>
                   </text>
                 </view>
               </view>
@@ -71,7 +66,6 @@
             </view>
             <button class="zhuanfa" data-item="{{item}}" open-type="share" data-from="coupon">转发给朋友</button>
           </view>
-
           <!-- 无券有返利 -->
           <view class="money_no_coupon" wx:if="{{item.couponStatus == 'money_no_coupon'}}">
             <image class='background' src='./images/money_no_coupon.png'></image>
@@ -83,7 +77,7 @@
                 <view class='content money_no_coupon'>
                   <text>{{item.title}}</text>
                   <text>
-                    <text>原价:￥{{item.discountprice}}</text>
+                                          <text>原价:￥{{item.discountprice}}</text>
                   </text>
                 </view>
               </view>
@@ -102,9 +96,7 @@
               </view>
             </view>
           </view>
-
         </block>
-
         <block wx:elif="{{item.type == 'card'}}">
           <!-- -->
           <!--物业 -->
@@ -130,7 +122,6 @@
             </view>
             <button class="zhuanfa" open-type="share" data-item="{{item.content}}" data-from="wuye">转发给朋友</button>
           </view>
-
           <!-- -->
           <!-- 通知 -->
           <view wx:elif="{{item.keywordtype == 2}}">
@@ -146,7 +137,6 @@
             </view>
             <button class="zhuanfa" open-type="share" data-item="{{item.content}}" data-from="tongzhi">转发给朋友</button>
           </view>
-
           <!--商品 -->
           <view wx:elif="{{item.keywordtype == 3}}">
             <view class='goodsContent' data-id="{{item.content.id}}" catchtap="_entryDetail">
@@ -172,11 +162,9 @@
             <button class="zhuanfa" open-type="share" data-item="{{item.content}}" data-from="shangping">转发给朋友</button>
           </view>
           <!--  -->
-
           <!-- 小区指南 -->
           <view wx:elif="{{item.keywordtype == 7}}">
-            <view class='estate_title flex flex-v flex-align-center' data-name="{{item.content.company}}" data-icon="{{item.content.logo}}"
-              data-from="data_list" data-id="{{item.content.id}}" catchtap="entryYellowPage">
+            <view class='estate_title flex flex-v flex-align-center' data-name="{{item.content.company}}" data-icon="{{item.content.logo}}" data-from="data_list" data-id="{{item.content.id}}" catchtap="entryYellowPage">
               <image src='{{item.content.logo}}'></image>
               <view class='estate_name'>
                 <text>{{item.content.company}}</text>
@@ -197,7 +185,6 @@
             </view>
             <button class="zhuanfa" open-type="share" data-item="{{item.content}}" data-from="zhinan">转发给朋友</button>
           </view>
-
         </block>
       </view>
     </block>
@@ -213,8 +200,6 @@
       chatBox: [],
       // 对话的定位
       toView: "",
-      // 气泡动画
-      animationData: null,
       // 加载更多的动画
       loader: "hide",
     };
@@ -227,12 +212,10 @@
           this.networkOutage();
           return;
         }
-
         var nid = e.currentTarget.dataset.item.nid;
         if (nid.substr(0, 4) != '1000') {
           nid = '1000' + nid;
         }
-
         wx.navigateTo({
           // url: '../h5/h5?taokouling='+ e.currentTarget.dataset.item.data.newcoupon +'&nid=1000' + e.currentTarget.dataset.item.data.nid ,
           url: '../h5/h5?nid=' + nid + '&taokouling=' + e.currentTarget.dataset.item.newcoupon
@@ -247,7 +230,6 @@
       },
       // 拨打电话
       calling(e) {
-
         app.calling(e.currentTarget.dataset.phone)
       },
       //转发给朋友
@@ -296,10 +278,10 @@
           title: title,
           path: path,
           imageUrl: '/pages/chatPage/images/share.jpg',
-          success: function (res) {
+          success: function(res) {
             // 转发成功
           },
-          fail: function (res) {
+          fail: function(res) {
             // 转发失败
           }
         }
@@ -322,102 +304,85 @@
               this.popup();
             }, 2000)
           }
-
         });
       },
     };
     props = {
-      syncChatBox:{
+      syncChatBox: {
         type: Array,
         default: 'null',
-        twoWay:true,
+        twoWay: true,
       }
     };
     watch = {
-      syncChatBox (newValue, oldValue) {
-          console.log(newValue)
-          var res = newValue;
-          // 老用户
-          if (res) {
-            this.chatBox = res.concat(this.chatBox)
-            this.popup(500, null);
-            this.popup(0, {
-              content: [],
-              type: 'new_msg',
-              ctime: new Date().getTime(),
-              class: "new_msgclass",
-            });
-            // 发问候语
-            this.greetingsWord.radomWord((res) => {
-              console.log(res)
-              this.popup(500, {
-                content: [res],
-                type: 'ai',
-                ctime: new Date().getTime(),
-                class: "aiWord",
-              });
-              this.popup(1000, {
-                content: ["有什么需要的，小松果一直都在。"],
-                type: 'ai',
-                ctime: new Date().getTime(),
-                class: "aiWord",
-              });
-              this.isGreet = false;
-            });
-          }
-          // 新用户
-          else {
+      syncChatBox(newValue, oldValue) {
+        console.log(newValue)
+        var res = newValue;
+        // 老用户
+        if (res) {
+          this.chatBox = res.concat(this.chatBox)
+          this.popup(500, null);
+          this.popup(0, {
+            content: [],
+            type: 'new_msg',
+            ctime: new Date().getTime(),
+            class: "new_msgclass",
+          });
+          // 发问候语
+          this.$parent.greetingsWord.radomWord((res) => {
+            // console.log(res)
             this.popup(500, {
-              content: ["Hi，" + userInfo.nickname + "，初次见面。"],
+              content: [res],
+              type: 'ai',
               ctime: new Date().getTime(),
-              type: "ai",
-              class: "aiWord"
-            })
+              class: "aiWord",
+            });
             this.popup(1000, {
-              content: ["我是小松果，您的专属小区管家。", "关于" + userInfo.shop_name +
-                "的一切，我都知道哦~",
-                "点击下面的按钮，解锁更多功能。"
-              ],
+              content: ["有什么需要的，小松果一直都在。"],
+              type: 'ai',
               ctime: new Date().getTime(),
-              type: "ai",
-              class: "aiWord"
-            })
-          }
-          console.log(`syncChatBox value: ${oldValue} -> ${newValue}`)
+              class: "aiWord",
+            });
+            this.$parent.isGreet = false;
+          });
+        }
+        // 新用户
+        else {
+          this.popup(500, {
+            content: ["Hi，" + userInfo.nickname + "，初次见面。"],
+            ctime: new Date().getTime(),
+            type: "ai",
+            class: "aiWord"
+          })
+          this.popup(1000, {
+            content: ["我是小松果，您的专属小区管家。", "关于" + userInfo.shop_name +
+              "的一切，我都知道哦~",
+              "点击下面的按钮，解锁更多功能。"
+            ],
+            ctime: new Date().getTime(),
+            type: "ai",
+            class: "aiWord"
+          })
+        }
+        console.log(`syncChatBox value: ${oldValue} -> ${newValue}`)
       }
     };
+    onLoad() {};
     // 弹出效果
     popup(time, obj) {
       // 对话的滚动
       let textScroll = () => {
         this.toView = "to" + this.chatBox.length;
       };
-      // 动画封装
-      let rotateAndScaleThenTranslate = () => {
-        var animation = wx.createAnimation({
-          duration: 500,
-          timingFunction: 'ease',
-        }).opacity(1).translateY(-240).step({
-          duration: 500,
-          timingFunction: "ease"
-        });
-        // this.animationData = animation.export();
-        // this.$apply();
-        this.setData({
-          animationData: animation.export()
-        })
-      }
       setTimeout(() => {
         if (obj) {
           this.chatBox.push(obj);
           this.$apply();
         }
         textScroll();
-        rotateAndScaleThenTranslate();
       }, time);
     };
   }
-
 </script>
 <style lang="less">
   .loader {
@@ -499,9 +464,7 @@
       display: inline-block;
     }
   }
-
   /* 聊天框部分 */
-
   .sectionBox {
     height: 100%;
     width: 100%;
@@ -510,8 +473,40 @@
     overflow: hidden;
     .BOX {
       &:nth-of-type(1) {
-        margin-top: 500rpx;
+        margin-top: 260rpx;
       }
+      -webkit-animation-iteration-count: 1;
+      animation-iteration-count: 1;
+      -webkit-animation-duration: .5s;
+      animation-duration: .5s;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
+    }
+    @-webkit-keyframes bounceInUp {
+      from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+      }
+      to {
+        -webkit-transform: translate3d(0, -240rpx, 0);
+        transform: translate3d(0, -240rpx, 0);
+      }
+    }
+    @keyframes bounceInUp {
+      from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+      }
+      to {
+        -webkit-transform: translate3d(0, -240rpx, 0);
+        transform: translate3d(0, -240rpx, 0);
+      }
+    }
+    .bounceInUp {
+      -webkit-animation-name: bounceInUp;
+      animation-name: bounceInUp;
     }
     /* 机器人回复 */
     .aiWord {
@@ -904,5 +899,4 @@
       }
     }
   }
-
 </style>
