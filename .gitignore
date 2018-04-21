@@ -21,5 +21,6 @@ node_modules
 *.ipr
 *.iml
 *.iws
+*.less
 
 *.wepycache
