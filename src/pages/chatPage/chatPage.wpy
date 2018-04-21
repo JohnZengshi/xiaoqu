@@ -78,11 +78,7 @@
         // 获取粘贴板并处理
         this.disposeClipboard();
       });
-<<<<<<< HEAD
       console.log("...底部发送框和其他按钮组件...")
-=======
-      console.log("...聊天框组件...")
->>>>>>> feature/聊天框组件
     };
     // 每次页面进入
     onShow() {
