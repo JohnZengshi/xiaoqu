@@ -1,7 +1,7 @@
 <template>
   <view class="section">
     <SectionBox :syncChatBox.sync="chatBox"></SectionBox>
-    <BottomPack :syncTemp.sync="temp"></BottomPack>
+    <BottomPack :syncTemp.sync="temp" :syncUser.sync="user"></BottomPack>
   </view>
 </template>
 <script>
@@ -43,6 +43,7 @@
       temp: false,
       // 聊天内容（传给子组件）
       chatBox: [],
+      user:null,
     };
     methods = {};
     watch = {
@@ -58,6 +59,7 @@
         let userInfo = res;
         // 设置全局变量
         this.$parent.globalData.userInfo = res;
+        this.user = res;
         // 显示选项按钮                
         this.temp = res.temp;
         this.temp = true;
@@ -72,7 +74,7 @@
         this.clipboard = new(this.getClipboard())(userInfo);
         // 获取聊天记录
         this.ChatRecord._ObtainChatRecord((res) => {
-          console.log(res);
+          // console.log(res);
           this.chatBox = res;
           this.$apply();
         });
@@ -398,7 +400,7 @@
     padding: 0 28rpx;
     background-color: #f5f5f6;
     border-top: 1px solid #ddd;
-    box-sizing: border-box; // 上拉加载的动画
+    box-sizing: border-box;
   }
 
 </style>

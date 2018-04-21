@@ -369,7 +369,7 @@
             class: "aiWord"
           })
         }
-        console.log(`syncChatBox value: ${oldValue} -> ${newValue}`)
+        // console.log(`syncChatBox value: ${oldValue} -> ${newValue}`)
       }
     };
     onLoad() {};
@@ -552,7 +552,9 @@
       display: inline-block;
     }
   }
+
   /* 聊天框部分 */
+
   .sectionBox {
     height: 100%;
     width: 100%;

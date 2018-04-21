@@ -27,17 +27,15 @@
     data = {
       // 输入框的值
       inputmsg: '',
-      // 选项的显示隐藏
-      // temp: false,
     };
-    async onLoad() {};
+    onLoad() {
+    };
     methods = {
       // 进入小区指南
       _entryGuide() {
-        if (this.$parent.globalData.userInfo) {
+        if (this.syncUser) {
           wx.navigateTo({
-            url: '../guide/guide?pid=' + this.$parent.globalData.userInfo.pid + "&shop_name=" + this.$parent.globalData
-              .userInfo.shop_name
+            url: '/pages/guide/guide?pid=' + this.syncUser.pid + "&shop_name=" + this.syncUser.shop_name
           })
         }
       },
@@ -60,37 +58,36 @@
       },
       // 进入物品借租页面
       _entryBorrow(e) {
-        if (this.$parent.globalData.userInfo) {
+        if (this.syncUser) {
           wx.navigateTo({
-            url: "../borrow/borrow"
+            url: "/pages/borrow/borrow"
           })
         }
       },
       // 进入我的中心
       _entryMine() {
-        if (this.$parent.globalData.userInfo) {
+        if (this.syncUser) {
           wx.navigateTo({
-            url: '../mine/mine'
+            url: '/pages/mine/mine'
           })
         }
       },
       // 进入会员
       _entryVip() {
-        if (this.$parent.globalData.userInfo) {
+        if (this.syncUser) {
           wx.navigateTo({
-            url: '../vip/vip?pid=' + this.$parent.globalData.userInfo.pid + "&shop_name=" + this.$parent.globalData
-              .userInfo.shop_name
+            url: '/pages/vip/vip?pid=' + this.syncUser.pid + "&shop_name=" + this.syncUser.shop_name
           })
         }
       },
       // 进入小区新鲜事
       entryFreshNews(e) {
         // console.log(e.currentTarget.dataset.item.id);
-        wx.navigateTo({
-          url: '../guide/subpage/freshNews/freshNews?pid=' + this.$parent.globalData.userInfo.pid +
-            "&notice_id=" + e.currentTarget
-            .dataset.item.id,
-        })
+        if (this.syncUser) {
+          wx.navigateTo({
+            url: '../guide/subpage/freshNews/freshNews?pid=' + this.syncUser.pid +"&notice_id=" + e.currentTarget.dataset.item.id,
+          })
+        }        
       },
       // 进入借租物品详情
       _entryDetail(e) {
@@ -107,7 +104,7 @@
       // 进入每日优鲜页面
       _entryFreshEverday() {
         wx.navigateTo({
-          url: "../h5/h5?agreementurl=" + Api.setConfig.url + "/h5/bns/index.html"
+          url: "../h5/h5?agreementurl=https://community.yzrom.com/h5/bns/index.html"
         })
       },
       // 进入小区黄页
@@ -248,6 +245,11 @@
         default: 'null',
         twoWay: true,
       },
+      syncUser:{
+        type:Object,
+        default:'null',
+        twoWay:true,
+      }
     };
   }
 

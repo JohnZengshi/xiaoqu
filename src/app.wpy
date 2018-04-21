@@ -15,7 +15,8 @@
         'pages/guide/guide',
         'pages/h5/h5',
         'pages/login/login',
-        'pages/mine/mine'
+        'pages/mine/mine',
+        'pages/vip/vip'
       ],
       window: {
         backgroundTextStyle: 'light',
