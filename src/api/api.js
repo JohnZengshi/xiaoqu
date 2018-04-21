@@ -37,7 +37,9 @@ const getTutorials = (params) => wxRequest(params, community + '/index.php?m=Api
 // 粘贴板内容请求
 const getClipboardData = (params) => wxRequest(params, community + '/index.php?m=Api&c=search&a=index');
 // 用户发送文案请求内容
-const getUserSearch = (params) => wxRequest(params, community + '//index.php?m=Api&c=search&a=index');
+const getUserSearch = (params) => wxRequest(params, community + '/index.php?m=Api&c=search&a=index');
+// 随机发送优惠券
+const randomSendCoupon = (params) => wxRequest(params,flzsYzrom + '/index.php/api/Getyq');
 module.exports = {
   token,
   login,
@@ -49,5 +51,6 @@ module.exports = {
   getWelmsg,
   getTutorials,
   getClipboardData,
-  getUserSearch
+  getUserSearch,
+  randomSendCoupon
 }

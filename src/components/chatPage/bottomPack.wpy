@@ -43,19 +43,20 @@
       },
       // 点击找优惠券按钮
       _findCoupon() {
-        popup(0, {
+        this.$parent.$com.SectionBox.popup(0, {
           content: ["帮我找隐藏优惠券"],
           type: "user",
           ctime: new Date().getTime(),
           class: "userWord",
         });
-        setTimeout((res) => {
-          let Getyq = Api.flzsYzrom + '/index.php/api/Getyq';
-          app.request("GET", Getyq, "", (res) => {
-            var data = res.data.data.data;
-            this.renderCoupon(data);
+        (async ()=>{
+          let res = await Api.randomSendCoupon({
+            query:"",
+            method:"GET"
           });
-        }, 1800)
+          let data = res.data.data.data;
+          this.$parent.$com.SectionBox.renderCoupon(data);
+        })()
       },
       // 进入物品借租页面
       _entryBorrow(e) {
@@ -241,7 +242,7 @@
     };
     events = {};
     props = {
-      // 父向子单向动态传值
+      // 父向子动态传值
       syncTemp: {
         type: Boolean,
         default: 'null',
