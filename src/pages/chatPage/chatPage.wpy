@@ -78,7 +78,7 @@
         // 获取粘贴板并处理
         this.disposeClipboard();
       });
-      console.log("...develop...")
+      console.log("...底部发送框和其他按钮组件...")
     };
     // 每次页面进入
     onShow() {
