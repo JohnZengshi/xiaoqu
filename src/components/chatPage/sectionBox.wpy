@@ -1,7 +1,15 @@
 <template>
-  <scroll-view class='sectionBox' id='scrollBox' data-id='scrollBox' scroll-y="true" style="margin-bottom: 40px;" scroll-into-view="{{syncToView}}">
+  <view class="loader {{loader == 'loaded'? 'hide': 'show'}} flex flex-v flex-pack-center flex-align-center">
+    <view class="loader-inner ball-pulse">
+      <view></view>
+      <view></view>
+      <view></view>
+    </view>
+  </view>
+  <scroll-view class='sectionBox {{loader}}' id='scrollBox' data-id='scrollBox' scroll-y="true" scroll-into-view="{{syncToView}}"
+    bindscrolltoupper="loadMore">
     <block wx:for="{{syncChatBox}}" wx:key="item">
-      <view id='to{{index+1}}' class="BOX {{item.class}} animated one bounceInUp">
+      <view id='to{{index+1}}' class="BOX {{item.class}} bounceInUp">
         <view wx:if="{{item.type == 'new_msg'}}">下面是最新消息</view>
         <view wx:if="{{item.type == 'ai' || item.type == 'user'}}">
           <text wx:for="{{item.content}}" wx:for-item="items" wx:key="key">{{items}}</text>
@@ -206,7 +214,7 @@
       // 对话的定位
       toView: "",
       // 加载更多的动画
-      loader: "hide",
+      loader: "loaded",
     };
     methods = {
       // 点击优惠券进入详情
@@ -293,21 +301,23 @@
       },
       // 上拉加载更多
       loadMore() {
-        let ChatRecord = this.ChatRecord
-        this.loader = "show";
-        this.toView = "";
-        ChatRecord.loadMore((res) => {
+        console.log("上拉加载更多。。")
+        this.loader = "loading";
+        this.$apply();
+        this.$parent.ChatRecord.loadMore((res) => {
+          console.log(res);
           if (res) {
-            this.chatBox = ChatRecord.userChatRecord.concat(this.chatBox);
             setTimeout(() => {
-              this.loader = "hide";
-            }, 2000)
+              this.loader = "loaded";
+              this.syncChatBox = res.concat(this.syncChatBox);
+              this.$apply();
+            }, 2000);
           } else {
-            app._showtoast("没有更多聊天记录了！", "none");
+            // app._showtoast("没有更多聊天记录了！", "none");
             setTimeout(() => {
-              this.loader = "hide";
-              this.popup();
-            }, 2000)
+              this.loader = "loaded";
+              this.$apply();
+            }, 2000);
           }
         });
       },
@@ -335,133 +345,20 @@
 
 </script>
 <style lang="less">
-  .loader {
-    @-webkit-keyframes scale {
-      0% {
-        -webkit-transform: scale(1);
-        transform: scale(1);
-        opacity: 1;
-      }
-      45% {
-        -webkit-transform: scale(0.1);
-        transform: scale(0.1);
-        opacity: 0.7;
-      }
-      80% {
-        -webkit-transform: scale(1);
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
-    @keyframes scale {
-      0% {
-        -webkit-transform: scale(1);
-        transform: scale(1);
-        opacity: 1;
-      }
-      45% {
-        -webkit-transform: scale(0.1);
-        transform: scale(0.1);
-        opacity: 0.7;
-      }
-      80% {
-        -webkit-transform: scale(1);
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
-    @-webkit-keyframes show {
-      0% {
-        height: 0px;
-      }
-      100% {
-        height: 40rpx;
-      }
-    }
-    .show {
-      -webkit-animation: show 0s 0s infinite cubic-bezier(.2, .68, .18, 1.08);
-      -webkit-animation-iteration-count: 1;
-      overflow: hidden;
-    }
-    .hide {
-      height: 0;
-      overflow: hidden;
-    }
-    .ball-pulse>view:nth-child(0) {
-      -webkit-animation: scale 0.75s 0s infinite cubic-bezier(.2, .68, .18, 1.08);
-      animation: scale 0.75s 0s infinite cubic-bezier(.2, .68, .18, 1.08);
-    }
-    .ball-pulse>view:nth-child(1) {
-      -webkit-animation: scale 0.75s 0.12s infinite cubic-bezier(.2, .68, .18, 1.08);
-      animation: scale 0.75s 0.12s infinite cubic-bezier(.2, .68, .18, 1.08);
-    }
-    .ball-pulse>view:nth-child(2) {
-      -webkit-animation: scale 0.75s 0.24s infinite cubic-bezier(.2, .68, .18, 1.08);
-      animation: scale 0.75s 0.24s infinite cubic-bezier(.2, .68, .18, 1.08);
-    }
-    .ball-pulse>view:nth-child(3) {
-      -webkit-animation: scale 0.75s 0.36s infinite cubic-bezier(.2, .68, .18, 1.08);
-      animation: scale 0.75s 0.36s infinite cubic-bezier(.2, .68, .18, 1.08);
-    }
-    .ball-pulse>view {
-      background-color: #FFD203;
-      width: 30rpx;
-      height: 30rpx;
-      border-radius: 100%;
-      margin: 4rpx;
-      -webkit-animation-fill-mode: both;
-      animation-fill-mode: both;
-      display: inline-block;
-    }
-  }
-
   /* 聊天框部分 */
-
   .sectionBox {
     height: 100%;
     width: 100%;
-    margin: 0 auto;
+    margin: 0px auto;
     position: relative;
     overflow: hidden;
+    z-index: 1;
     .BOX {
       overflow: hidden;
       &:nth-of-type(1) {
         margin-top: 420rpx;
       }
-      -webkit-animation-iteration-count: 1;
-      animation-iteration-count: 1;
-      -webkit-animation-duration: .5s;
-      animation-duration: .5s;
-      -webkit-animation-fill-mode: both;
-      animation-fill-mode: both;
     }
-    @-webkit-keyframes bounceInUp {
-      from {
-        opacity: 0;
-        -webkit-transform: translate3d(0, 0, 0);
-        transform: translate3d(0, 0, 0);
-      }
-      to {
-        -webkit-transform: translate3d(0, -400rpx, 0);
-        transform: translate3d(0, -400rpx, 0);
-      }
-    }
-    @keyframes bounceInUp {
-      from {
-        opacity: 0;
-        -webkit-transform: translate3d(0, 0, 0);
-        transform: translate3d(0, 0, 0);
-      }
-      to {
-        -webkit-transform: translate3d(0, -400rpx, 0);
-        transform: translate3d(0, -400rpx, 0);
-      }
-    }
-    .bounceInUp {
-      -webkit-animation-name: bounceInUp;
-      animation-name: bounceInUp;
-    }
-
     /* 机器人回复 */
     .aiWord {
       position: relative;

@@ -44,11 +44,14 @@
       // 聊天内容（传给子组件）
       chatBox: [],
       // 聊天气泡的定位
-      toView:"",
+      toView: "",
       // 用户信息
       user: null,
     };
-    methods = {};
+    methods = {
+
+
+    };
     watch = {
       temp(newValue, oldValue) {
         console.log(`num value: ${oldValue} -> ${newValue}`)
@@ -309,8 +312,8 @@
           if (this.flag) {
             this.userChatRecord = JSON.parse(this.allChat[this.time].usersay);
             this.time++;
-            console.log(this.userChatRecord);
-            callback(true);
+            // console.log(this.userChatRecord);
+            callback(this.userChatRecord);
           } else {
             callback(false);
           }
@@ -530,7 +533,6 @@
 </script>
 <style lang="less">
   /* 首页进入部分 */
-
   .section {
     height: 100%;
     overflow: hidden;
@@ -539,5 +541,4 @@
     border-top: 1px solid #ddd;
     box-sizing: border-box;
   }
-
 </style>
