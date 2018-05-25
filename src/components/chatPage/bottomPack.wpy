@@ -21,75 +21,73 @@
   </view>
 </template>
 <script>
-  import wepy from 'wepy'
+  import wepy from 'wepy';
+  import Api from '../../api/api'
   export default class bottomPack extends wepy.component {
     data = {
       // 输入框的值
       inputmsg: '',
-      // 选项的显示隐藏
-      // temp: false,
     };
-    async onLoad() {
+    onLoad() {
     };
     methods = {
       // 进入小区指南
       _entryGuide() {
-        if (this.$parent.globalData.userInfo) {
+        if (this.syncUser) {
           wx.navigateTo({
-            url: '../guide/guide?pid=' + this.$parent.globalData.userInfo.pid + "&shop_name=" + this.$parent.globalData
-              .userInfo.shop_name
+            url: '/pages/guide/guide?pid=' + this.syncUser.pid + "&shop_name=" + this.syncUser.shop_name
           })
         }
       },
       // 点击找优惠券按钮
       _findCoupon() {
-        this.popup(0, {
+        this.$parent.popup(0, {
           content: ["帮我找隐藏优惠券"],
           type: "user",
           ctime: new Date().getTime(),
           class: "userWord",
         });
-        setTimeout((res) => {
-          let Getyq = Api.flzsYzrom + '/index.php/api/Getyq';
-          app.request("GET", Getyq, "", (res) => {
-            var data = res.data.data.data;
-            this.renderCoupon(data);
+        (async ()=>{
+          let res = await Api.randomSendCoupon({
+            query:"",
+            method:"GET"
           });
-        }, 1800)
+          let data = res.data.data.data;
+          this.$parent.renderCoupon(data);
+        })()
       },
       // 进入物品借租页面
       _entryBorrow(e) {
-        if (this.$parent.globalData.userInfo) {
+        if (this.syncUser) {
           wx.navigateTo({
-            url: "../borrow/borrow"
+            url: "/pages/borrow/borrow"
           })
         }
       },
       // 进入我的中心
       _entryMine() {
-        if (this.$parent.globalData.userInfo) {
+        if (this.syncUser) {
           wx.navigateTo({
-            url: '../mine/mine'
+            url: '/pages/mine/mine'
           })
         }
       },
       // 进入会员
       _entryVip() {
-        if (this.$parent.globalData.userInfo) {
+        if (this.syncUser) {
           wx.navigateTo({
-            url: '../vip/vip?pid=' + this.$parent.globalData.userInfo.pid + "&shop_name=" + this.$parent.globalData
-              .userInfo.shop_name
+            url: '/pages/vip/vip?pid=' + this.syncUser.pid + "&shop_name=" + this.syncUser.shop_name
           })
         }
       },
       // 进入小区新鲜事
       entryFreshNews(e) {
         // console.log(e.currentTarget.dataset.item.id);
-        wx.navigateTo({
-          url: '../guide/subpage/freshNews/freshNews?pid=' + this.$parent.globalData.userInfo.pid +
-            "&notice_id=" + e.currentTarget
-            .dataset.item.id,
-        })
+        if (this.syncUser) {
+          wx.navigateTo({
+            url: '../guide/subpage/freshNews/freshNews?pid=' + this.syncUser.pid +"&notice_id=" + e.currentTarget.dataset.item.id,
+          })
+        }        
       },
       // 进入借租物品详情
       _entryDetail(e) {
@@ -102,12 +100,11 @@
         } else {
           // app._showtoast("点太快了~")
         }
-
       },
       // 进入每日优鲜页面
       _entryFreshEverday() {
         wx.navigateTo({
-          url: "../h5/h5?agreementurl=" + Api.setConfig.url + "/h5/bns/index.html"
+          url: "../h5/h5?agreementurl=https://community.yzrom.com/h5/bns/index.html"
         })
       },
       // 进入小区黄页
@@ -125,7 +122,8 @@
       bindButtonTap() {
         var keyword = this.inputmsg
         if (keyword == "") return;
-        this.popup(0, {
+        // console.log(this.$parent.popup);
+        this.$parent.popup(0, {
           content: [keyword],
           ctime: new Date().getTime(),
           type: "user",
@@ -136,7 +134,7 @@
         // 缓存有商品数据
         if (value) {
           let coupon = value;
-          this.renderCoupon(coupon);
+          this.$parent.renderCoupon(coupon);
         }
         // 缓存没有商品数据
         else {
@@ -144,8 +142,8 @@
             let res = await Api.getUserSearch({
               query: {
                 keyword: keyword,
-                pid: this.$parent.globalData.userInfo.pid,
-                uid: this.$parent.globalData.userInfo.id,
+                pid: this.$parent.$parent.globalData.userInfo.pid,
+                uid: this.$parent.$parent.globalData.userInfo.id,
               },
               method: "POST"
             })
@@ -153,7 +151,7 @@
             let responseWay = {
               // 物业
               1: (res) => {
-                this.popup(500, {
+                this.$parent.popup(500, {
                   content: res.data.data.data,
                   type: "card",
                   ctime: new Date().getTime(),
@@ -163,7 +161,7 @@
               },
               // 通知
               2: (res) => {
-                this.popup(500, {
+                this.$parent.popup(500, {
                   content: res.data.data.data,
                   type: "card",
                   ctime: new Date().getTime(),
@@ -173,7 +171,7 @@
               },
               // 商品
               3: (res) => {
-                this.popup(500, {
+                this.$parent.popup(500, {
                   content: res.data.data.data,
                   type: "card",
                   ctime: new Date().getTime(),
@@ -185,7 +183,6 @@
               4: (res) => {
                 // console.log(res.data.data.data)
                 let coupons = res.data.data.data;
-
                 try {
                   wx.setStorageSync(keyword, coupons);
                 } catch (e) {};
@@ -205,7 +202,7 @@
                   let coupon = res.data.data.data.data.data;
                   this.renderCoupon(coupon)
                 } else {
-                  this.popup(500, {
+                  this.$parent.popup(500, {
                     content: ["没有优惠券"],
                     type: "ai",
                     ctime: new Date().getTime(),
@@ -216,7 +213,7 @@
               },
               // 接机器人
               6: (res) => {
-                this.popup(500, {
+                this.$parent.popup(500, {
                   content: [res.data.data.data.text],
                   type: "ai",
                   ctime: new Date().getTime(),
@@ -226,7 +223,7 @@
               },
               // 小区指南
               7: (res) => {
-                this.popup(500, {
+                this.$parent.popup(500, {
                   content: res.data.data.data,
                   type: "card",
                   ctime: new Date().getTime(),
@@ -239,22 +236,24 @@
           })();
         }
       },
-
     };
     events = {};
     props = {
-      // 父向子单向动态传值
+      // 父向子动态传值
       syncTemp: {
         type: Boolean,
         default: 'null',
         twoWay: true,
       },
+      syncUser:{
+        type:Object,
+        default:'null',
+        twoWay:true,
+      }
     };
-    
   }
 
 </script>
-
 <style lang="less">
   /* 底部部分 */
 
