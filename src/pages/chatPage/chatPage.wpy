@@ -59,6 +59,7 @@
     };
     // 页面初始化
     onLoad() {
+      console.log("...")
       // 登录
       (new(this.login())).wxLogin((res) => {
         // console.log(this)
