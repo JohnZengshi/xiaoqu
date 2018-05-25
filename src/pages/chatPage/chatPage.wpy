@@ -59,6 +59,7 @@
     };
     // 页面初始化
     onLoad() {
+      console.log("...")
       // 登录
       (new(this.login())).wxLogin((res) => {
         // console.log(this)
@@ -131,6 +132,10 @@
         // 获取粘贴板并处理
         this.disposeClipboard();
       });
+<<<<<<< HEAD
+      console.log("...master...")
+=======
+>>>>>>> release/xiaoqu
     };
     // 每次页面进入
     onShow() {
