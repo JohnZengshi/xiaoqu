@@ -1,0 +1,14 @@
+<template>
+  <view>会员页面</view>
+</template>
+<script>
+import wepy from 'wepy'
+export default class vip extends wepy.page {
+  data = {
+      
+  }
+}
+</script>
+<style lang="less">
+    
+</style>
