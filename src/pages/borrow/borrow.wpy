@@ -1,14 +1,51 @@
 <template>
-    <view>借租页面</view>
+  <!-- <view>借租页面</view> -->
+  <!-- <drawer :mode.sync="left">
+  </drawer> -->
+  <!-- <drawer :open.sync="customOpen">
+  </drawer> -->
+  <drawer :mode.sync="bottom">
+  </drawer>
+  <flash/>
+  <!-- <lineChart></lineChart> -->
+  <!-- <drawer :closeClass.sync="customCloseClass">
+  </drawer> -->
+  <!-- <drawer :displayClose.sync="hasDisplayClose">
+  </drawer> -->
+  <button @tap.stop="show">按钮1</button>
+  <button @tap.stop="tip">按钮2</button>
 </template>
 <script>
-import wepy from 'wepy'
-export default class borrow extends wepy.page {
-  
-}
+  import wepy from 'wepy';
+  import Drawer from 'wepy-com-paper-drawer';
+  import Flash from 'wepy-com-paper-flash';
+//   import Charts from 'wepy-com-charts';
+  export default class borrow extends wepy.page {
+    components = {
+      drawer: Drawer,
+      flash: Flash,
+    //   lineChart: Charts
+    }
+
+    data = {
+      bottom: "bottom"
+    }
+    onLoad() {
+    //   this.$invoke('lineChart', 'draw');
+    }
+    methods = {
+      show() {
+        this.$invoke('drawer', 'toggle', null)
+      },
+      tip() {
+        const message = 'Product added to cart'
+        this.$invoke('flash', 'showMessage', message)
+      }
+    }
+  }
+
 </script>
 <style lang="less">
 
+
 </style>
-
-
