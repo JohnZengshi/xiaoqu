@@ -1,13 +1,4 @@
 <template>
-  <view class="loader {{loader == 'loaded'? 'hide': 'show'}} flex flex-v flex-pack-center flex-align-center">
-    <view class="loader-inner ball-pulse">
-      <view></view>
-      <view></view>
-      <view></view>
-    </view>
-  </view>
-  <scroll-view class='sectionBox {{loader}}' id='scrollBox' data-id='scrollBox' scroll-y="true" scroll-into-view="{{syncToView}}"
-    bindscrolltoupper="loadMore">
     <block wx:for="{{syncChatBox}}" wx:key="item">
       <view id='to{{index+1}}' class="BOX {{item.class}} bounceInUp">
         <view wx:if="{{item.type == 'new_msg'}}">下面是最新消息</view>
@@ -197,8 +188,6 @@
         </block>
       </view>
     </block>
-    <!--关键字搜索 -->
-  </scroll-view>
 </template>
 <script>
   import wepy from 'wepy';
@@ -207,6 +196,7 @@
     toDecimal2,
     timeImg,
   } from '../../utils/util';
+
   export default class sectionBox extends wepy.component {
     data = {
       // 聊天界面的对话
@@ -216,6 +206,8 @@
       // 加载更多的动画
       loader: "loaded",
     };
+    components = {
+    }
     methods = {
       // 点击优惠券进入详情
       couponToDetail(e) {
@@ -321,6 +313,8 @@
           }
         });
       },
+
+
     };
     props = {
       syncChatBox: {
@@ -340,30 +334,26 @@
         // console.log(`syncChatBox value: ${oldValue} -> ${newValue}`)
       }
     };
+    
     onLoad() {};
   }
 
 </script>
 <style lang="less">
   /* 聊天框部分 */
-  .sectionBox {
-    height: 100%;
-    width: 100%;
-    margin: 0px auto;
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
     .BOX {
       overflow: hidden;
+      // transform: translateY(-400rpx);
       &:nth-of-type(1) {
-        margin-top: 420rpx;
+        margin-top: 400rpx;
       }
     }
     /* 机器人回复 */
     .aiWord {
       position: relative;
+      display: inline-block;
       width: 100%;
-      float: left;
+      // float: left;
       margin: 16rpx 0;
       >view {
         max-width: 78.8%;
@@ -384,8 +374,9 @@
     /* 用户回复 */
     .userWord {
       position: relative;
+      display: inline-block;
       width: 100%;
-      float: right;
+      // float: right;
       margin: 16rpx 0;
       >view {
         max-width: 67.8%;
@@ -406,7 +397,7 @@
     .message {
       border-radius: 6rpx;
       width: 673rpx;
-      float: left;
+      // float: left;
       margin: 16rpx 0;
       overflow: hidden; // box-shadow: 5rpx 5rpx 10rpx #ccc;
       .estate_title {
@@ -504,7 +495,7 @@
       margin-top: 30rpx;
       border-radius: 6rpx;
       width: 673rpx;
-      float: left;
+      // float: left;
       margin: 16rpx 0;
       overflow: hidden;
       .goodsContent {
@@ -749,6 +740,5 @@
         }
       }
     }
-  }
 
 </style>
