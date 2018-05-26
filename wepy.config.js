@@ -8,6 +8,9 @@ module.exports = {
     less: {
       compress: true
     },
+    // sass: {
+    //   compress: true
+    // },
     babel: {
       sourceMap: true,
       presets: [
@@ -30,10 +33,14 @@ if (prod) {
 
   delete module.exports.compilers.babel.sourcesMap;
   // 压缩sass
-  // module.exports.compilers['sass'] = { outputStyle: 'compressed' }
+  // module.exports.compilers['sass'] = {
+  //   outputStyle: 'compressed'
+  // }
 
   // 压缩less
-  module.exports.compilers['less'] = { compress: true }
+  module.exports.compilers['less'] = {
+    compress: true
+  }
 
   // 压缩js
   module.exports.plugins = {
@@ -67,7 +74,7 @@ function deleteTarget(fileUrl) {
     var len = files.length,
       removeNumber = 0;
     if (len > 0) {
-      files.forEach(function(file) {
+      files.forEach(function (file) {
         removeNumber++;
         var stats = fs.statSync(fileUrl + '/' + file);
         var url = fileUrl + '/' + file;
