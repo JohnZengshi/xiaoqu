@@ -1,14 +1,62 @@
 <template>
-  <view>会员页面</view>
+  <!-- <view>会员页面</view> -->
+  <view class="kai-content">
+    <scroll-view scroll-y="{{true}}" class="refresh-scroll__container" scroll-with-animation="{{true}}" bindscrolltolower="lower"
+      style="width: 100vw;height:100vh;" catchscroll="scroll">
+      <view style="width:100%;height:100%;">
+        <refresh :scrollTop.sync="scrollTop">
+          <view slot="refresh-content" style="margin-top:45px;">
+            <repeat for="{{[0]}}" index="i" item="item" key="new-{{i}}">
+              <view class="new-block">
+                {{i}}
+              </view>
+            </repeat>
+          </view>
+        </refresh>
+      </view>
+    </scroll-view>
+  </view>
 </template>
 <script>
-import wepy from 'wepy'
-export default class vip extends wepy.page {
-  data = {
-      
+  import wepy from 'wepy';
+  import Tabs from 'wepy-com-tabs';
+  import Refresh from 'wepy-scroll-view-refresh';
+  export default class vip extends wepy.page {
+    data = {
+      scrollTop: 0
+    }
+    components = {
+      tabs: Tabs,
+      refresh: Refresh
+    }
+    onLoad() {
+      this.$invoke('tabs', 'init', ['选项1', '选项2', '选项3']);
+    }
+    events = {
+      'refresh': (res) => {
+        if (res === 'success') {
+          setTimeout(() => {
+            this.$invoke('refresh', 'reset')
+          }, 3000)
+        }
+      }
+    }
+    methods = {
+      tabChange(index) {
+        console.log(index);
+      },
+      lower(index) {
+        console.log(index)
+      },
+      scroll(e) {
+        this.scrollTop = e.detail.scrollTop
+        this.$apply()
+      }
+    }
   }
-}
+
 </script>
 <style lang="less">
-    
+
+
 </style>
